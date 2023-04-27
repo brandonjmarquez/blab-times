@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "storytimes",
+  "info": {
+    "singularName": "storytime",
+    "pluralName": "storytimes",
+    "displayName": "Storytime",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "post": {
+      "type": "text"
+    },
+    "api": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "book_reports",
+  "info": {
+    "singularName": "book-report",
+    "pluralName": "book-reports",
+    "displayName": "Book Report",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "post": {
+      "type": "text"
+    },
+    "api": {
+      "type": "string"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "book_report"
+    }
+  }
+}

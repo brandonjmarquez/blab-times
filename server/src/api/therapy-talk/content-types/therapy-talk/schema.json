@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "therapy_talks",
+  "info": {
+    "singularName": "therapy-talk",
+    "pluralName": "therapy-talks",
+    "displayName": "Therapy Talk",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "post": {
+      "type": "text"
+    },
+    "api": {
+      "type": "string"
+    }
+  }
+}
