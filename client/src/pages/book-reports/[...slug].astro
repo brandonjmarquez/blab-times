@@ -1,0 +1,22 @@
+---
+import { CollectionEntry, getCollection } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const response = await fetch("http://127.0.0.1:1338/api/book-reports?populate=*");
+	const { data } = await response.json();
+	
+	return data.map((post: any) => {
+		return {
+			params: { slug: post.id },
+			props: { post },
+		};
+	});
+}
+
+const { post } = Astro.props;
+---
+
+<BlogPost {...post}>
+</BlogPost>

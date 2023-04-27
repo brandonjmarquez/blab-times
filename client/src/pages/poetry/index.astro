@@ -1,0 +1,53 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const response = await fetch("http://127.0.0.1:1338/api/poetries?populate=*");
+const { data } = await response.json();
+console.log(data, 'data')
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			ul {
+				list-style-type: none;
+				padding: unset;
+			}
+			ul li {
+				display: flex;
+			}
+			ul li :global(time) {
+				flex: 0 0 130px;
+				font-style: italic;
+				color: #595959;
+			}
+			ul li a:visited {
+				color: #8e32dc;
+			}
+		</style>
+	</head>
+	<body class="m-auto">
+		<Header title={SITE_TITLE} client:load />
+		<main>
+			<section>
+				<ul>
+					{
+						data.map((post: any) => (
+							<li>
+								<FormattedDate date={post.attributes.createdAt} />
+								<a href={`/poetry/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

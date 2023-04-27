@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import FormattedDate from '../components/FormattedDate.astro';
+console.log(Astro.props)
+const { attributes } = Astro.props;
+const { title, post, description, createdAt, updatedAt, cover } = attributes;
+let url = "";
+
+if(cover.data) {
+	url = cover.data.attributes.url;
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			.title {
+				font-size: 2em;
+				margin: 0.25em 0 0;
+			}
+			hr {
+				/* border-top: 1px solid #ddd;
+				margin: 1rem 0; */
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header title={SITE_TITLE} client:load />
+		<main>
+			<article>
+				{url.length > 0 && <img src={`http://127.0.0.1:1338${url}`} alt="" class="w-full rounded-b-md" />}
+				<h1 class="title text-4xl">{title}</h1>
+				<FormattedDate date={createdAt} />
+				{
+					updatedAt && (
+						<div>
+							Last updated on <FormattedDate date={updatedAt} />
+						</div>
+					)
+				}
+				<hr/>
+				<slot />
+				{post.split("\n").map((post: any) => {
+					return(
+						<p>
+							{post}
+							<br>
+						</p>
+					)
+				})}
+			</article>
+			<div>
+				<p>Likes</p>
+				<p>Comments</p>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

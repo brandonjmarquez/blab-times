@@ -1,0 +1,55 @@
+---
+// import Layout from '../layouts/BlogPost.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
+const response = await fetch("http://127.0.0.1:1338/api/about?populate=*")
+const { data } = await response.json();
+const { about } = data.attributes;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title="About Me" description="About Me" />
+		<style>
+			/* .title {
+				font-size: 2em;
+				margin: 0.25em 0 0;
+			} */
+			hr {
+				/* border-top: 4px solid #ddd;
+				margin: 1rem 0; */
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header title={SITE_TITLE} client:load />
+		<main>
+			<article>
+				<!-- {heroImage && <img width={720} height={360} src={heroImage} alt="" />} -->
+				<h1 class="title text-4xl">About Me</h1>
+				<hr/>
+				<div class="">
+					<img src={`http://localhost:1338${data.attributes.hanna.data.attributes.url}`} alt="me" class="w-1/3 float-left object-contain m-1">
+					<!-- <p class="text-justify">{data.attributes.about}</p> -->
+					{about.split("\n").map((about: any) => {
+						return (
+							<p class="text-justify indent-4">
+								{about}
+								<br>
+							</p>
+						)
+					})}
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
