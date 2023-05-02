@@ -5,13 +5,14 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FormattedDate from '../components/FormattedDate.astro';
-console.log(Astro.props)
+import Comments from '../components/Comments.astro';
+
 const { attributes } = Astro.props;
-const { title, post, description, createdAt, updatedAt, cover } = attributes;
-let url = "";
+const { title, post, description, createdAt, updatedAt, cover, comments } = attributes;
+let coverUrl = "";
 
 if(cover.data) {
-	url = cover.data.attributes.url;
+	coverUrl = cover.data.attributes.url;
 }
 ---
 
@@ -38,7 +39,7 @@ if(cover.data) {
 		<Header title={SITE_TITLE} client:load />
 		<main>
 			<article>
-				{url.length > 0 && <img src={`http://127.0.0.1:1338${url}`} alt="" class="w-full rounded-b-md" />}
+				{coverUrl.length > 0 && <img src={`${import.meta.env.REACT_APP_BACKEND_URL}${coverUrl}`} alt="" class="w-full rounded-b-md" />}
 				<h1 class="title text-4xl">{title}</h1>
 				<FormattedDate date={createdAt} />
 				{
@@ -62,6 +63,7 @@ if(cover.data) {
 			<div>
 				<p>Likes</p>
 				<p>Comments</p>
+				<Comments {...comments} />
 			</div>
 		</main>
 		<Footer />

@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 import Header from '../components/Header';
-import Login from '../components/Login';
+import RegisterForm from '../components/RegisterForm';
 ---
 
 <!DOCTYPE html>
@@ -18,8 +18,8 @@ import Login from '../components/Login';
 		<main>
 			<div class="flex flex-col justify-center md:flex-row">
 				<div>
-					<h1>Login to Blab Times</h1>
-          <Login client:load />
+					<h1>Register to Blab Times</h1>
+          <RegisterForm client:load />
 				</div>
 			</div>
 		</main>

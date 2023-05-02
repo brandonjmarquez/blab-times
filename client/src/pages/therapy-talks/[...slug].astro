@@ -4,7 +4,7 @@ import BlogPost from '../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	const response = await fetch("http://127.0.0.1:1338/api/therapy-talks?populate=*");
+	const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/therapy-talks?populate=*`);
 	const { data } = await response.json();
 
 	return data.map((post: any) => {
@@ -14,11 +14,8 @@ export async function getStaticPaths() {
 		};
 	});
 }
-// type Props = CollectionEntry<'blog'>;
 
 const { post } = Astro.props;
-// console.log(post.attributes, "LLLLLLLLL");
-// const { Content } = await post.render();
 ---
 
 <BlogPost {...post}>

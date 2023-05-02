@@ -21,7 +21,7 @@
       "target": "api::book-report.book-report",
       "inversedBy": "comments"
     },
-    "author": {
+    "users_permissions_user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",

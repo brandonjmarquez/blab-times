@@ -13,11 +13,11 @@ import RecentPosts from '../components/RecentPosts';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body class="m-auto">
+	<body>
 		<Header title={SITE_TITLE} client:load />
 		<main>
-			<div class="flex flex-col md:flex-row">
-				<div>
+			<div class="flex flex-col md:flex-row w-full">
+				<div class="w-4/6">
 					<h1>🧑‍🚀 Hello, Astronaut!</h1>
 					<p>
 						Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This

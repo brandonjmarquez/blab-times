@@ -17,16 +17,15 @@ const Login = () => {
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
-      const res = await axios.post("http://127.0.0.1:1338/api/auth/local", {
+      const res = await axios.post(`${import.meta.env.REACT_APP_BACKEND_URL}/api/auth/local`, {
         identifier: credentials.email,
         password: credentials.password
       });
       const { jwt, user } = res.data;
+      
       window.localStorage.setItem('jwt', jwt);
-      window.localStorage.setItem('userData', JSON.stringify(user));
-      window.location.replace(`http://localhost:3000${window.location.hash.substring(1)}`);
+      window.location.replace(import.meta.env.REACT_APP_BACKEND_URL);
     } catch(err) {
       setIsError(true);
     }
@@ -54,7 +53,7 @@ const Login = () => {
 
   return (
     <div>
-      <form className="flex flex-col justify-center" onSubmit={(e) => login(e)}>
+      <form className="flex flex-col justify-center" onSubmit={login}>
         <div className="my-2">
           <label className="font-bold mb-5 mr-3">Email</label>
           <input 

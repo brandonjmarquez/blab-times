@@ -5,9 +5,8 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const response = await fetch("http://127.0.0.1:1338/api/poetries?populate=*");
+const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/poetries?populate=*`);
 const { data } = await response.json();
-console.log(data, 'data')
 ---
 
 <!DOCTYPE html>
