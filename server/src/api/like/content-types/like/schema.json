@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "comments",
+  "collectionName": "likes",
   "info": {
-    "singularName": "comment",
-    "pluralName": "comments",
-    "displayName": "Comment",
+    "singularName": "like",
+    "pluralName": "likes",
+    "displayName": "Like",
     "description": ""
   },
   "options": {
@@ -12,20 +12,17 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "comment": {
-      "type": "text",
-      "maxLength": 300,
-      "minLength": 1
+    "liked": {
+      "type": "boolean"
+    },
+    "api": {
+      "type": "string"
     },
     "users_permissions_user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "comments"
-    },
-    "api": {
-      "type": "string",
-      "required": true
+      "inversedBy": "likes"
     },
     "postId": {
       "type": "integer"

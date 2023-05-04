@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const RecentPosts = () => {
+interface Props {
+  REACT_APP_BACKEND_URL: string;
+}
+
+const RecentPosts = (props: Props) => {
   const [posts, setPosts] = useState<any>([]);
   const sorted = useRef(false);
 
@@ -9,13 +13,13 @@ const RecentPosts = () => {
     const monthAgo = new Date(new Date().setDate(current.getDate() - 30));
 
     const fetchPosts = async () => {
-      const bookReports = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const poetry = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const storytime = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const therapyTalks = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const bookReports = await fetch(`${props.REACT_APP_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const poetry = await fetch(`${props.REACT_APP_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const storytime = await fetch(`${props.REACT_APP_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const therapyTalks = await fetch(`${props.REACT_APP_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
       const fetches = [bookReports, poetry, storytime, therapyTalks];
       
-      await Promise.all(fetches)
+      // await Promise.all(fetches);
       const posts = await Promise.all(fetches.map(r => r.json()));
       return posts;
     }
@@ -45,7 +49,6 @@ const RecentPosts = () => {
 
     const sortPosts = () => {
       let postsSorted = posts;
-      let datesSorted = [];
       for (var i = 0; i < posts.length - 1; i++) {
         for (var j = 0; j < posts.length-i-1; j++) {
           if (new Date(postsSorted[j].attributes.publishedAt) < new Date (postsSorted[j + 1].attributes.publishedAt)) {

@@ -5,10 +5,11 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FormattedDate from '../components/FormattedDate.astro';
-import Comments from '../components/Comments.astro';
+import Comments from '../components/Comments';
+import Likes from '../components/Likes';
 
-const { attributes } = Astro.props;
-const { title, post, description, createdAt, updatedAt, cover, comments } = attributes;
+const { attributes, id } = Astro.props;
+const { title, post, description, createdAt, updatedAt, cover, api } = attributes;
 let coverUrl = "";
 
 if(cover.data) {
@@ -36,7 +37,7 @@ if(cover.data) {
 	</head>
 
 	<body>
-		<Header title={SITE_TITLE} client:load />
+		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
 		<main>
 			<article>
 				{coverUrl.length > 0 && <img src={`${import.meta.env.REACT_APP_BACKEND_URL}${coverUrl}`} alt="" class="w-full rounded-b-md" />}
@@ -60,10 +61,10 @@ if(cover.data) {
 					)
 				})}
 			</article>
+			<hr/>
 			<div>
-				<p>Likes</p>
-				<p>Comments</p>
-				<Comments {...comments} />
+				<Likes api={api} postId={id} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+				<Comments api={api} postId={id} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
 			</div>
 		</main>
 		<Footer />

@@ -30,7 +30,7 @@ const { about } = data.attributes;
 	</head>
 
 	<body>
-		<Header title={SITE_TITLE} client:load />
+		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
 		<main>
 			<article>
 				<!-- {heroImage && <img width={720} height={360} src={heroImage} alt="" />} -->

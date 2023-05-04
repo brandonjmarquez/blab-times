@@ -1,10 +1,15 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 
-const RegisterForm = () => {
+interface Props {
+  REACT_APP_BACKEND_URL: string;
+  REACT_APP_FRONTEND_URL: string;
+}
+
+const RegisterForm = (props: Props) => {
   const [responseMessage, setResponseMessage] = useState("");
 
-  async function register(e: React.FormEvent<HTMLFormElement>) {
+  const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = [...new FormData(e.target as HTMLFormElement)]
       .reduce((a: any, [key, value]: any) => {
@@ -12,14 +17,14 @@ const RegisterForm = () => {
         return a;
       }, {});
     try {
-      const response = await axios.post(`${import.meta.env.REACT_APP_BACKEND_URL}/api/auth/local/register`, {
+      const response = await axios.post(`${props.REACT_APP_BACKEND_URL}/api/auth/local/register`, {
         ...formData
       });
       const { data } = await response;
+      location.replace(props.REACT_APP_FRONTEND_URL + '/login' + location.hash)
     } catch(err: any) {
       setResponseMessage(err.response.data.error.message)
     }
-    
   }
 
   return (
@@ -53,7 +58,7 @@ const RegisterForm = () => {
         />
       </div>
       {responseMessage && <p className="text-red-500">{responseMessage}</p>}
-      <button className="self-center text-custom-200 bg-custom-300 w-1/2 rounded-md py-2">Send</button>
+      <button type="submit" className="self-center text-custom-200 bg-custom-300 w-1/2 rounded-md py-2">Register</button>
     </form>
   );
 }

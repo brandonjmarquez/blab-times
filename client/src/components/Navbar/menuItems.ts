@@ -14,7 +14,6 @@ export const menuItems = [
   },
   {
     title: 'Writing Categories ▼',
-    url: '/categories',
     submenu: [
       {
         title: 'Book Reports',

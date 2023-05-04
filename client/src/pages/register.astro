@@ -14,12 +14,12 @@ import RegisterForm from '../components/RegisterForm';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header title={SITE_TITLE} client:load />
+		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
 		<main>
 			<div class="flex flex-col justify-center md:flex-row">
 				<div>
 					<h1>Register to Blab Times</h1>
-          <RegisterForm client:load />
+          <RegisterForm REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} REACT_APP_FRONTEND_URL={import.meta.env.REACT_APP_FRONTEND_URL} client:load />
 				</div>
 			</div>
 		</main>

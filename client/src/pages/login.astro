@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 import Header from '../components/Header';
-import Login from '../components/Login';
+import Login from '../components/LoginForm';
 ---
 
 <!DOCTYPE html>
@@ -14,12 +14,12 @@ import Login from '../components/Login';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header title={SITE_TITLE} client:load />
+		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
 		<main>
 			<div class="flex flex-col justify-center md:flex-row">
 				<div>
 					<h1>Login to Blab Times</h1>
-          <Login client:load />
+          <Login REACT_APP_FRONTEND_URL={import.meta.env.REACT_APP_FRONTEND_URL} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:only />
 				</div>
 			</div>
 		</main>

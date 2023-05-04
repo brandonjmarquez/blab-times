@@ -1,15 +1,26 @@
 import { menuItems } from './menuItems';
+import { menuItemsCollapsed } from './menuItemsCollapsed';
 import MenuItem from './MenuItem';
 
-const Navbar = () => {
+interface Props {
+  collapsed: boolean;
+}
+
+const Navbar = (props: Props) => {
+  const depthLevel = 0;
   return (
-    <nav>
-      <ul className="flex items-center flex-wrap list-none px-3">{
-        menuItems.map((menu, index) => {
-          return <MenuItem items={menu} key={index} />
-        })
-      }</ul>
-    </nav>
+      <ul className="flex items-center justify-between flex-wrap list-none px-3">
+        {
+          props.collapsed ?
+            menuItemsCollapsed.map((menu, index) => {
+              return <MenuItem className="" depthLevel={depthLevel} items={menu} key={index} />
+            })
+            :
+            menuItems.map((menu, index) => {
+              return <MenuItem className="" depthLevel={depthLevel} items={menu} key={index} />
+            })
+        }
+      </ul>
   );
 };
 

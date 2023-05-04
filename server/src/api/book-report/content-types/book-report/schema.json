@@ -34,12 +34,6 @@
         "videos",
         "audios"
       ]
-    },
-    "comments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::comment.comment",
-      "mappedBy": "book_report"
     }
   }
 }
