@@ -12,8 +12,9 @@ body {
 	/* font-family: "Amatic SC", sans-serif; */
 	font-size: 1rem;
 	margin: auto;
-	padding: 20px;
-	max-width: 75%;
+	/* padding: 20px; */
+
+	max-width: 100%;
 	text-align: left;
 	background-color: rgb(var(--color-custom-100));
 	word-wrap: break-word;
@@ -84,4 +85,8 @@ hr  {
 	border-top: 4px solid rgb(var(--color-custom-300));;
 	margin: 1rem;
 	height: 4px;
+}
+
+main {
+	margin: 0 3rem;
 }

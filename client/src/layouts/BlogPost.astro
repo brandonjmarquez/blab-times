@@ -37,10 +37,10 @@ if(cover.data) {
 	</head>
 
 	<body>
-		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<article>
-				{coverUrl.length > 0 && <img src={`${import.meta.env.REACT_APP_BACKEND_URL}${coverUrl}`} alt="" class="w-full rounded-b-md" />}
+				{coverUrl.length > 0 && <img src={`${import.meta.env.ASTRO_BACKEND_URL}${coverUrl}`} alt="" class="w-full rounded-b-md" />}
 				<h1 class="title text-4xl">{title}</h1>
 				<FormattedDate date={createdAt} />
 				{
@@ -63,8 +63,8 @@ if(cover.data) {
 			</article>
 			<hr/>
 			<div>
-				<Likes api={api} postId={id} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
-				<Comments api={api} postId={id} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+				<Likes api={api} postId={id} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
+				<Comments api={api} postId={id} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 			</div>
 		</main>
 		<Footer />

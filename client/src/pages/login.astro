@@ -14,12 +14,12 @@ import Login from '../components/LoginForm';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<div class="flex flex-col justify-center md:flex-row">
 				<div>
 					<h1>Login to Blab Times</h1>
-          <Login REACT_APP_FRONTEND_URL={import.meta.env.REACT_APP_FRONTEND_URL} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:only />
+          <Login ASTRO_FRONTEND_URL={import.meta.env.ASTRO_FRONTEND_URL} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:only />
 				</div>
 			</div>
 		</main>

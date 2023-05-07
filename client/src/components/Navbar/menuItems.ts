@@ -33,4 +33,14 @@ export const menuItems = [
       },
     ]
   },
+  {
+    title: 'Account',
+    url: '/account',
+    loggedIn: true
+  },
+  {
+    title: 'Login',
+    url: '/login',
+    loggedIn: false
+  }
 ];

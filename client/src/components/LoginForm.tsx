@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 interface Props {
-  REACT_APP_FRONTEND_URL: string;
-  REACT_APP_BACKEND_URL: string;
+  ASTRO_FRONTEND_URL: string;
+  ASTRO_BACKEND_URL: string;
 }
 
 const LoginForm = (props: Props) => {
@@ -11,7 +11,7 @@ const LoginForm = (props: Props) => {
   const [credentials, setCredentials] = useState<{email: string, password: string}>({email: "", password: ""})
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isError, setIsError] = useState(false)
-  const registerUri = useRef(`${props.REACT_APP_FRONTEND_URL}/register${location.hash}`)
+  const registerUri = useRef(`${props.ASTRO_FRONTEND_URL}/register${location.hash}`)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     return setCredentials((credentials) => {
@@ -25,14 +25,14 @@ const LoginForm = (props: Props) => {
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${props.REACT_APP_BACKEND_URL}/api/auth/local`, {
+      const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local`, {
         identifier: credentials.email,
         password: credentials.password
       });
       const { jwt, user } = res.data;
       
-      window.localStorage.setItem('jwt', jwt);
-      window.location.replace(props.REACT_APP_FRONTEND_URL + location.hash.substring(1));
+      window.sessionStorage.setItem('jwt', jwt);
+      window.location.replace(props.ASTRO_FRONTEND_URL + location.hash.substring(1));
     } catch(err: any) {
       setIsError(true);
       setResponseMessage(err.response.data.error.message)
@@ -85,7 +85,7 @@ const LoginForm = (props: Props) => {
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
         <button type="submit" disabled={!buttonDisabled} className={`self-center text-custom-200 bg-custom-300 w-1/2 rounded-md py-2 ${buttonDisabled ? "bg-custom-300" : "bg-red-500"}`}>Login</button>
       </form>
-      <span>Not a member? <a href={`${props.REACT_APP_FRONTEND_URL}/register${location.hash}`}>Click here to register.</a></span>
+      <span>Not a member? <a href={`${props.ASTRO_FRONTEND_URL}/register${location.hash}`}>Click here to register.</a></span>
     </div>
   )
 }

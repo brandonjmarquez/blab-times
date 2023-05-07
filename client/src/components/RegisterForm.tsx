@@ -2,8 +2,8 @@ import axios, { AxiosError } from "axios";
 import { useState } from "react";
 
 interface Props {
-  REACT_APP_BACKEND_URL: string;
-  REACT_APP_FRONTEND_URL: string;
+  ASTRO_BACKEND_URL: string;
+  ASTRO_FRONTEND_URL: string;
 }
 
 const RegisterForm = (props: Props) => {
@@ -17,11 +17,11 @@ const RegisterForm = (props: Props) => {
         return a;
       }, {});
     try {
-      const response = await axios.post(`${props.REACT_APP_BACKEND_URL}/api/auth/local/register`, {
+      const response = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local/register`, {
         ...formData
       });
       const { data } = await response;
-      location.replace(props.REACT_APP_FRONTEND_URL + '/login' + location.hash)
+      location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash)
     } catch(err: any) {
       setResponseMessage(err.response.data.error.message)
     }

@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/storytimes?populate=*`);
+const response = await fetch(`${import.meta.env.ASTRO_BACKEND_URL}/api/storytimes?populate=*`);
 const { data } = await response.json();
 ---
 
@@ -32,7 +32,7 @@ const { data } = await response.json();
 		</style>
 	</head>
 	<body class="m-auto">
-		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<section>
 				<ul>

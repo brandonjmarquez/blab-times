@@ -3,7 +3,7 @@ import { CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
-	const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/book-reports?populate=title,post,description,createdAt,updatedAt,cover,comments`);
+	const response = await fetch(`${import.meta.env.ASTRO_BACKEND_URL}/api/book-reports?populate=*`);
 	const { data } = await response.json();
 
 	return data.map((post: any) => {

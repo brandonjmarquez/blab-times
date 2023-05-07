@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 interface Props {
   api: string;
   postId: number;
-  REACT_APP_BACKEND_URL: string;
+  ASTRO_BACKEND_URL: string;
 }
 
 const Comments = (props: Props) => {
@@ -16,7 +16,7 @@ const Comments = (props: Props) => {
 
   useEffect(() => {
     const getComments = async () => {
-      return await axios.get(`${props.REACT_APP_BACKEND_URL}/api/comments?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&pagination[page]=${page}&sort[0]=id%3Adesc`);
+      return await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&pagination[page]=${page}&sort[0]=id%3Adesc`);
     };
 
     getComments().then((res) => {setPagination(res.data.meta.pagination); setComments((comments) => [...comments, ...res.data.data])})
@@ -24,14 +24,14 @@ const Comments = (props: Props) => {
 
   const comment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(localStorage.getItem("jwt")!);
+    const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
     const createComment = async () => {
       const formData = [...new FormData(e.target as HTMLFormElement)]
         .reduce((a: any, [key, value]: any) => {
           a[key] = value;
           return a;
         }, {});
-      const createCommentRes = await axios.post(`${props.REACT_APP_BACKEND_URL}/api/comments`, {
+      const createCommentRes = await axios.post(`${props.ASTRO_BACKEND_URL}/api/comments`, {
         data: {
           ...formData,
           users_permissions_user: decodedJwt.id,
@@ -40,19 +40,20 @@ const Comments = (props: Props) => {
         }
       }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
       }).then(() => location.reload());
     }
-    const current = new Date();
-    const minuteAgo = new Date(current.valueOf() - 60000);
-    const lastComment = await axios.get(`${props.REACT_APP_BACKEND_URL}/api/comments?populate=*&filters[users_permissions_user][id][$eq]=${decodedJwt.id}&filters[publishedAt][$gte]=${minuteAgo.toJSON()}`);
-
-    if(lastComment.data.data.length === 0) {
-      createComment();
-    } else {
-      setResponseMessage("Please wait at least one minute before commenting again.")
-    }
+    
+    const lastMinute = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/last-minute/${decodedJwt.id}`)
+      .then((res) => {
+        console.log(res.data)
+        if(res.data.length === 0) {
+          createComment();
+        } else {
+          setResponseMessage("Please wait at least one minute before commenting again.")
+        }
+      })
   }
 
   return (

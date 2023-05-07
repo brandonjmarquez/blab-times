@@ -15,7 +15,7 @@ export const menuItemsCollapsed = [{
       target: '_blank',
     },
     {
-      title: 'Writing Categories ▼',
+      title: '◀ Writing Categories',
       submenu: [
         {
           title: 'Book Reports',
@@ -35,5 +35,15 @@ export const menuItemsCollapsed = [{
         },
       ]
     },
+    {
+      title: 'Account',
+      url: '/account',
+      loggedIn: true
+    },
+    {
+      title: 'Login',
+      url: '/login',
+      loggedIn: false
+    }
   ]
 }];

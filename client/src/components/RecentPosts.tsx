@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
-  REACT_APP_BACKEND_URL: string;
+  ASTRO_BACKEND_URL: string;
 }
 
 const RecentPosts = (props: Props) => {
@@ -13,10 +13,10 @@ const RecentPosts = (props: Props) => {
     const monthAgo = new Date(new Date().setDate(current.getDate() - 30));
 
     const fetchPosts = async () => {
-      const bookReports = await fetch(`${props.REACT_APP_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const poetry = await fetch(`${props.REACT_APP_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const storytime = await fetch(`${props.REACT_APP_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const therapyTalks = await fetch(`${props.REACT_APP_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const bookReports = await fetch(`${props.ASTRO_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const poetry = await fetch(`${props.ASTRO_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const storytime = await fetch(`${props.ASTRO_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const therapyTalks = await fetch(`${props.ASTRO_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
       const fetches = [bookReports, poetry, storytime, therapyTalks];
       
       // await Promise.all(fetches);
@@ -65,12 +65,13 @@ const RecentPosts = (props: Props) => {
   }, [posts]);
 
   return (
-    <div className="w-2/6">
-      <h4>Recent Posts</h4>
+    <div className="md:w-1/5">
+      <h4 className="font-bold text-center">Recent Posts</h4>
       <ul>
         {posts.map((post: any, index: number) => {
+          const title = post.attributes.title.length < 32 ? post.attributes.title : post.attributes.title.substring(0, 32) + "..."
           let date = new Date(post.attributes.publishedAt);
-          return <li key={index}><a href={`/${post.attributes.api}/${post.id}`} className="text-custom-200">{post.attributes.title} {date.toLocaleDateString()}</a></li>
+          return <div key={index}><li className="flex justify-center text-center"><a href={`/${post.attributes.api}/${post.id}`} className="text-custom-200"><p className="underline">{title} </p><p>{date.toLocaleDateString()}</p></a></li><hr></hr></div>
         })}
       </ul>
     </div>

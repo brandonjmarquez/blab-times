@@ -7,7 +7,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import Header from '../components/Header';
 import RecentPosts from '../components/RecentPosts';
 
-const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/home`)
+const response = await fetch(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`)
 const { data } = await response.json();
 const { home } = data.attributes;
 ---
@@ -18,10 +18,10 @@ const { home } = data.attributes;
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header title={SITE_TITLE} REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<div class="flex flex-col md:flex-row w-full">
-				<div class="w-4/6 pr-7">
+				<div class="md:w-4/5 md:pr-7">
 					{home.split("\n").map((home: any) => {
 						return (
 							<p class="text-justify indent-4">
@@ -31,7 +31,7 @@ const { home } = data.attributes;
 						)
 					})}
 				</div>
-				<RecentPosts REACT_APP_BACKEND_URL={import.meta.env.REACT_APP_BACKEND_URL} client:load />
+				<RecentPosts ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 			</div>
 		</main>
 		<Footer />
