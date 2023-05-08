@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 const response = await fetch(`${import.meta.env.ASTRO_BACKEND_URL}/api/about?populate=*`)
 const { data } = await response.json();
 const { about } = data.attributes;
+console.log(data)
 ---
 
 <!DOCTYPE html>

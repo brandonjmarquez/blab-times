@@ -15,20 +15,22 @@
     "comment": {
       "type": "text",
       "maxLength": 300,
-      "minLength": 1
-    },
-    "users_permissions_user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "comments"
+      "minLength": 1,
+      "required": true
     },
     "api": {
       "type": "string",
       "required": true
     },
     "postId": {
+      "type": "integer",
+      "required": true
+    },
+    "userId": {
       "type": "integer"
+    },
+    "username": {
+      "type": "string"
     }
   }
 }

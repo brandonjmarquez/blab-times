@@ -18,14 +18,14 @@
     "api": {
       "type": "string"
     },
-    "users_permissions_user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "likes"
-    },
     "postId": {
       "type": "integer"
+    },
+    "userId": {
+      "type": "integer"
+    },
+    "username": {
+      "type": "string"
     }
   }
 }

@@ -21,7 +21,7 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
           {
             users_permissions_user: {
               id: {
-                $eq: ctx.params.id
+                $eq: ctx.params.userId
               }
             }
           }
@@ -29,5 +29,25 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
       }
     });
     ctx.body = entry;
-  }
+  },
+  getComments: async (ctx) => {
+    const entries = await strapi.db.query("api::comment.comment").findMany({
+      where: {
+        $and: [
+          {
+            api: {
+              $eq: ctx.params.api
+            },
+          },
+          {
+            postId: {
+              $eq: ctx.params.postId
+            }
+          }
+        ]
+      },
+      populate: true
+    });
+    ctx.body = entries;
+  },
 }));

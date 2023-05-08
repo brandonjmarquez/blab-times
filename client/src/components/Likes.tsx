@@ -19,12 +19,14 @@ const Likes = (props: Props) => {
       const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
       await getLiked(decodedJwt.id);
       const likes =  await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[liked][$eq]=true`);
+      const countLikes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/count-likes/${props.api}/${props.postId}`)
+      return countLikes
     };
 
     (async () => {
       try {
         const likes: any = await getLikes();
-        setLikes(likes.data.meta.pagination.total)
+        setLikes(likes.data)
       } catch(err) {
         setResponseMessage("")
       }
@@ -33,9 +35,10 @@ const Likes = (props: Props) => {
 
   const getLiked = async (id: number) => {
     try {
-      const liked = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[users_permissions_user][id][$eq]=${id}`)
+      const liked = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[userId][$eq]=${id}`)
       if(liked.data.data.length === 1)
-          setLiked(liked.data.data[0])
+        setLiked(liked.data.data[0])
+        
     } catch(err) {
       setResponseMessage("There was an error fetching the amount of likes.");
     }
@@ -46,9 +49,9 @@ const Likes = (props: Props) => {
     try {
       if(Object.keys(liked).length === 0) {
         const setLike = await axios.post(`${props.ASTRO_BACKEND_URL}/api/likes`, {
-          data: {
+          body: {
             liked: true,
-            users_permissions_user: decodedJwt.id,
+            userId: decodedJwt.id,
             api: props.api,
             postId: props.postId
           }
@@ -63,12 +66,12 @@ const Likes = (props: Props) => {
         getLiked(decodedJwt.id);
       } else {
         const setLike = await axios.put(`${props.ASTRO_BACKEND_URL}/api/likes/${liked.id}`, {
-          data: {
+          // data: {
             liked: !liked.attributes.liked,
-            users_permissions_user: decodedJwt.id,
+            userId: decodedJwt.id,
             api: props.api,
             postId: props.postId
-          }
+          // }
         }, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("jwt")}`

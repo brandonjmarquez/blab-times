@@ -16,25 +16,30 @@ const Comments = (props: Props) => {
 
   useEffect(() => {
     const getComments = async () => {
-      return await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&pagination[page]=${page}&sort[0]=id%3Adesc`);
+      //  axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/get-comments/${props.api}/${props.postId}`).then((res) => console.log(res.data));
+      return await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments?filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&pagination[page]=${page}&sort[0]=id%3Adesc&populate=*`);
     };
+    
 
     getComments().then((res) => {setPagination(res.data.meta.pagination); setComments((comments) => [...comments, ...res.data.data])})
+    // getComments().then((res) => {setComments((comments) => [...comments, ...res.data])})
   }, [page]);
 
   const comment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
+    // console.log(jwtDecode("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"))
     const createComment = async () => {
       const formData = [...new FormData(e.target as HTMLFormElement)]
         .reduce((a: any, [key, value]: any) => {
           a[key] = value;
           return a;
         }, {});
+        console.log(decodedJwt.id, formData)
       const createCommentRes = await axios.post(`${props.ASTRO_BACKEND_URL}/api/comments`, {
         data: {
           ...formData,
-          users_permissions_user: decodedJwt.id,
+          userId: decodedJwt.id,
           api: props.api,
           postId: props.postId.toString()
         }
@@ -44,10 +49,13 @@ const Comments = (props: Props) => {
         }
       }).then(() => location.reload());
     }
-    
-    const lastMinute = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/last-minute/${decodedJwt.id}`)
+
+    const lastMinute = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/last-minute/${decodedJwt.id}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+      }
+    })
       .then((res) => {
-        console.log(res.data)
         if(res.data.length === 0) {
           createComment();
         } else {
@@ -71,7 +79,7 @@ const Comments = (props: Props) => {
           return (
             <div key={index} className="border-2 px-2">
               <p className="flex font-bold justify-between">
-                {commentInfo.attributes.users_permissions_user.data.attributes.username}
+                {commentInfo.attributes.username}
                 <time 
                   dateTime={new Date(commentInfo.attributes.publishedAt).toISOString()}
                   className="px-3 self-end"

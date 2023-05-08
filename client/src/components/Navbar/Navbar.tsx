@@ -1,7 +1,7 @@
 import { menuItems } from './menuItems';
 import { menuItemsCollapsed } from './menuItemsCollapsed';
 import MenuItem from './MenuItem';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   collapsed: boolean;
@@ -14,13 +14,8 @@ const Navbar = (props: Props) => {
   const [removedButton, setRemovedButton] = useState(false);
 
   useEffect(() => {
-    console.log(menuCol);
-  }, [menuCol]);
-
-  useEffect(() => {
     const loggedIn = sessionStorage.getItem('jwt') === null ? false : true;
     if(!removedButton) {
-      console.log(removedButton)
       if(loggedIn) {
         // Remove "Login" button
         setMenu((menu: any) => {
