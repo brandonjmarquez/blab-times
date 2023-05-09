@@ -20,48 +20,67 @@ const Comments = (props: Props) => {
       return await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments?filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&pagination[page]=${page}&sort[0]=id%3Adesc&populate=*`);
     };
     
-
-    getComments().then((res) => {setPagination(res.data.meta.pagination); setComments((comments) => [...comments, ...res.data.data])})
-    // getComments().then((res) => {setComments((comments) => [...comments, ...res.data])})
+    getComments().then((res) => {setPagination(res.data.meta.pagination); setComments((comments) => [...comments, ...res.data.data]); console.log(res.data.data)})
   }, [page]);
 
   const comment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
-    // console.log(jwtDecode("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"))
-    const createComment = async () => {
-      const formData = [...new FormData(e.target as HTMLFormElement)]
+    try {
+      const createComment = async () => {
+        const formData = [...new FormData(e.target as HTMLFormElement)]
+          .reduce((a: any, [key, value]: any) => {
+            a[key] = value;
+            return a;
+          }, {});
+        const createCommentRes = await axios.post(`${props.ASTRO_BACKEND_URL}/api/comments`, {
+          data: {
+            ...formData,
+            userId: decodedJwt.id,
+            api: props.api,
+            postId: props.postId.toString()
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+          }
+        })
+        location.reload();
+      } 
+
+      const lastMinute = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/last-minute/${decodedJwt.id}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+        }
+      })
+        
+      if(lastMinute.data.length === 0) {
+        const formData = [...new FormData(e.target as HTMLFormElement)]
         .reduce((a: any, [key, value]: any) => {
           a[key] = value;
           return a;
         }, {});
-        console.log(decodedJwt.id, formData)
-      const createCommentRes = await axios.post(`${props.ASTRO_BACKEND_URL}/api/comments`, {
-        data: {
-          ...formData,
-          userId: decodedJwt.id,
-          api: props.api,
-          postId: props.postId.toString()
-        }
-      }, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
-        }
-      }).then(() => location.reload());
-    }
-
-    const lastMinute = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/last-minute/${decodedJwt.id}`, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+        const createCommentRes = await axios.post(`${props.ASTRO_BACKEND_URL}/api/comments`, {
+          data: {
+            ...formData,
+            userId: decodedJwt.id,
+            api: props.api,
+            postId: props.postId.toString()
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+          }
+        })
+        location.reload();
+      } else {
+        setResponseMessage("Please wait at least one minute before commenting again.")
       }
-    })
-      .then((res) => {
-        if(res.data.length === 0) {
-          createComment();
-        } else {
-          setResponseMessage("Please wait at least one minute before commenting again.")
-        }
-      })
+        
+    } catch(err: any) {
+      console.log()
+      setResponseMessage(err.response.data.error.message)
+    }
   }
 
   return (
@@ -76,6 +95,8 @@ const Comments = (props: Props) => {
       </form>
       {
         comments.map((commentInfo: any, index: number) => {
+          const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt") ?? "")
+          console.log(commentInfo , decodedJwt.id);
           return (
             <div key={index} className="border-2 px-2">
               <p className="flex font-bold justify-between">
@@ -95,7 +116,10 @@ const Comments = (props: Props) => {
                   }
                 </time>
               </p>
-              <p>{commentInfo.attributes.comment}</p>
+              <p className="flex justify-between">
+                <span className="whitespace-break-spaces">{commentInfo.attributes.comment}</span>
+                {commentInfo.attributes.userId === decodedJwt.id && <span>delete</span>}
+              </p>
             </div>
           )
         })
