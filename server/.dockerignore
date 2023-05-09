@@ -1,5 +1,6 @@
-fly.toml
-Dockerfile
-.dockerignore
-node_modules
-.git
+.tmp/
+.cache/
+.git/
+build/
+node_modules/
+data/

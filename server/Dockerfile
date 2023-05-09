@@ -1,42 +1,21 @@
-# syntax = docker/dockerfile:1
-
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.15.0
-FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="NodeJS"
-
-# NodeJS app lives here
-WORKDIR /app
-
-# Set production environment
+# Dockerfile
+FROM node:16
+# Installing libvips-dev for sharp Compatability
+RUN apt-get update && apt-get install libvips-dev -y
+# Set environment to production
 ENV NODE_ENV=production
-
-
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential 
-
-# Install node modules
-COPY --link package.json package-lock.json .
+# Copy the configuration files
+WORKDIR /opt/
+COPY ./package.json ./package-lock.json ./
+ENV PATH /opt/node_modules/.bin:$PATH
+# Install dependencies
 RUN npm install
-
-# Copy application code
-COPY --link . .
-
-# Build application
-RUN npm run build
-
-
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-CMD [ "npm", "run", "start" ]
+# Copy the application files
+WORKDIR /opt/app
+COPY ./ .
+# Build the Strapi application
+RUN yarn build
+# Expose the Strapi port
+EXPOSE 1338
+# Start the Strapi application
+CMD ["npm", "start"]

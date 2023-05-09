@@ -4,11 +4,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 
-const response = await fetch(`${import.meta.env.ASTRO_BACKEND_URL}/api/about?populate=*`)
-const { data } = await response.json();
+const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/about?populate=*`)
+const { data } = await response.data;
 const { about } = data.attributes;
-console.log(data)
 ---
 
 <!DOCTYPE html>

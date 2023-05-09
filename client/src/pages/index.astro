@@ -6,9 +6,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 import Header from '../components/Header';
 import RecentPosts from '../components/RecentPosts';
+import axios from 'axios';
 
-const response = await fetch(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`)
-const { data } = await response.json();
+const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`)
+const { data } = await response.data;
 const { home } = data.attributes;
 ---
 

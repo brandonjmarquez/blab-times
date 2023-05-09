@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
@@ -13,14 +14,13 @@ const RecentPosts = (props: Props) => {
     const monthAgo = new Date(new Date().setDate(current.getDate() - 30));
 
     const fetchPosts = async () => {
-      const bookReports = await fetch(`${props.ASTRO_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const poetry = await fetch(`${props.ASTRO_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const storytime = await fetch(`${props.ASTRO_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const therapyTalks = await fetch(`${props.ASTRO_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const bookReports = await axios.get(`${props.ASTRO_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const poetry = await axios.get(`${props.ASTRO_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const storytime = await axios.get(`${props.ASTRO_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
+      const therapyTalks = await axios.get(`${props.ASTRO_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
       const fetches = [bookReports, poetry, storytime, therapyTalks];
+      const posts = await Promise.all(fetches.map(r => r.data));
       
-      // await Promise.all(fetches);
-      const posts = await Promise.all(fetches.map(r => r.json()));
       return posts;
     }
 
