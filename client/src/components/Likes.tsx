@@ -49,12 +49,10 @@ const Likes = (props: Props) => {
     try {
       if(Object.keys(liked).length === 0) {
         const setLike = await axios.post(`${props.ASTRO_BACKEND_URL}/api/likes`, {
-          body: {
-            liked: true,
-            userId: decodedJwt.id,
-            api: props.api,
-            postId: props.postId
-          }
+          liked: true,
+          userId: decodedJwt.id,
+          api: props.api,
+          postId: props.postId
         }, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
@@ -65,13 +63,11 @@ const Likes = (props: Props) => {
         })
         getLiked(decodedJwt.id);
       } else {
-        const setLike = await axios.put(`${props.ASTRO_BACKEND_URL}/api/likes/${liked.id}`, {
-          // data: {
-            liked: !liked.attributes.liked,
-            userId: decodedJwt.id,
-            api: props.api,
-            postId: props.postId
-          // }
+        const setLike = await axios.put(`${props.ASTRO_BACKEND_URL}/api/likes`, {
+          liked: !liked.attributes.liked,
+          userId: decodedJwt.id,
+          api: props.api,
+          postId: props.postId
         }, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("jwt")}`

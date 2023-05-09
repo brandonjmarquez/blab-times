@@ -17,6 +17,14 @@ module.exports = {
       config: {
         policies: []
       }
+    },
+    {
+      method: 'PUT',
+      path: '/likes',
+      handler: 'like.update',
+      config: {
+        policies: []
+      }
     }
   ]
 }
