@@ -40,7 +40,6 @@ const Navbar = (props: Props) => {
           state.splice(4, 1);
           return state;
         });
-        console.log(menuCol)
         setMenuCol((menuCol: any) => {
           let state = [...menuCol];
           let submenu = state[0].submenu = state[0].submenu;
@@ -59,7 +58,6 @@ const Navbar = (props: Props) => {
       { menu && menuCol ?
         props.collapsed ?
           menuCol.map((menu: any, index: number) => {
-            // console.log(index)
             return <MenuItem collapsed={props.collapsed} index={index} depthLevel={depthLevel} items={menu} key={index} />
           })
           :

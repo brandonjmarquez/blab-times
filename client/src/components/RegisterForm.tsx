@@ -16,6 +16,7 @@ const RegisterForm = (props: Props) => {
         a[key] = value;
         return a;
       }, {});
+      
     try {
       const response = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local/register`, {
         ...formData

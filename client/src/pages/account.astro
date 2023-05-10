@@ -4,13 +4,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
+import Accounts from '../components/Accounts'
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<BaseHead title="About Me" description="About Me" />
+		<BaseHead title="Account" description="Accounts page" />
 		<style>
 			/* .title {
 				font-size: 2em;
@@ -29,7 +29,7 @@ import Footer from '../components/Footer';
 	<body>
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
-
+      <Accounts ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		</main>
 		<Footer />
 	</body>
