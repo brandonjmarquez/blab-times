@@ -62,7 +62,6 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
       offset: 1 + ctx.params.page * 10,
       limit: 10
     });
-    console.log(entries, 1 + ctx.params.page * 10)
     let comments = [];
     if(entries.length > 0)
       for(var i = 0; i < entries.length; i++) {

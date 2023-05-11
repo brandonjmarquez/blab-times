@@ -116,19 +116,23 @@ module.exports = createCoreController('api::like.like', ({ strapi }) => ({
 
   me: async (ctx) => {
     const pluralize = require('pluralize');
-    const entries = await strapi.db.query("api::like.like").findPage(ctx.params.page, 10,{
-      where: { userId: ctx.params.userId }
+    const entries = await strapi.db.query("api::like.like").findMany({
+      where: { userId: ctx.params.userId },
+      orderBy: { publishedAt: 'desc' },
+      offset: 1 + ctx.params.page * 10,
+      limit: 10
     })
     let likes = [];
-    for(var i = 0; i < entries.results.length; i++) {
-      const post = await strapi.db.query(`api::${pluralize.singular(entries.results[i].api)}.${pluralize.singular(entries.results[i].api)}`).findOne({
-        where: { id: entries.results[i].postId }
-      });
-      let entryCp = {...entries.results[i]}
-      entryCp.title = post.title
-      likes.push(entryCp);
-    }
-
+    if(entries.length > 0)
+      for(var i = 0; i < entries.length; i++) {
+        const post = await strapi.db.query(`api::${pluralize.singular(entries[i].api)}.${pluralize.singular(entries[i].api)}`).findOne({
+          where: { id: entries[i].postId }
+        });
+        let entryCp = {...entries[i]}
+        entryCp.title = post.title
+        likes.push(entryCp);
+      }
+    console.log(likes)
     ctx.body = likes;
   }
 }));

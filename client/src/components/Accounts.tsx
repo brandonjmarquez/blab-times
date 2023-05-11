@@ -13,7 +13,7 @@ const Accounts = (props: Props) => {
   const [showLikes, setShowLikes] = useState(true);
   const [likes, setLikes] = useState<any>([]);
   const [comments, setComments] = useState<any>([]);
-  const [likesPage, setLikesPage] = useState(1);
+  const [likesPage, setLikesPage] = useState(0);
   const [commentsPage, setCommentsPage] = useState(0);
 
   const getMe = async () => {
@@ -51,7 +51,7 @@ const Accounts = (props: Props) => {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
       });
-      setLikes(likes.data);
+      setLikes((likesOld: any) => [...likesOld, ...likes.data]);
     } catch(err) {
       setResponseMessage("There was an error loading your data.")
     }
@@ -87,8 +87,8 @@ const Accounts = (props: Props) => {
 
   return (
     userData ? 
-    <div className="grid grid-cols-2">
-      <div>
+    <div className="flex flex-col md:flex-row">
+      <div className="md:w-1/3 my-2">
         <p>Username: {userData.username}</p>
         <p>Email: {userData.email}</p>
         <p>Email Confirmed: {userData.confirmed ? "Confirmed" : "Unconfirmed"}</p>
@@ -96,7 +96,7 @@ const Accounts = (props: Props) => {
         <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md mx-2" onClick={() => {sessionStorage.removeItem("jwt"); location.replace("/")}}>Logout</button>
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
       </div>
-      <div>
+      <div className="md:w-2/3 my-2">
         <button id="likes-button" className={`text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md ${showLikes ? "bg-green-300" : ""}`} onClick={() => {setShowLikes(true); }}>Likes</button>
         <button id="comments-button" className={`text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md ${!showLikes ? "bg-green-300" : ""}`} onClick={() => setShowLikes(false)}>Comments</button>
         {
@@ -105,11 +105,24 @@ const Accounts = (props: Props) => {
             {likes.map((like: any, index: number) => {
               return (
                 <div key={index}>
-                  <p><a href={`/${like.api}/${like.postId}`}>{like.title}</a></p>
+                  <p><a href={`/${like.api}/${like.postId}`}>{like.title}</a>
+                  <time 
+                      dateTime={new Date(like.publishedAt).toISOString()}
+                      className="px-3 self-end font-bold"
+                    >
+                      {
+                        new Date(like.publishedAt).toLocaleString('en-us', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        })
+                      }
+                    </time>
+                  </p>
                 </div>
               )
             })}
-            {likes.length % 10 === 0 ? <button onClick={() => setLikesPage(likesPage + 1)}>Load more</button> : null}
+            {likes.length % 10 === 0 ? <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={() => setLikesPage(likesPage + 1)}>Load more</button> : null}
           </div>
           :
           <div>
@@ -137,7 +150,7 @@ const Accounts = (props: Props) => {
                 </div>
               )
             })}
-            {comments.length % 10 === 0 && comments.length !== 0 ? <button onClick={() => setCommentsPage(commentsPage + 1)}>Load more</button> : null}
+            {comments.length % 10 === 0 && comments.length !== 0 ? <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={() => setCommentsPage(commentsPage + 1)}>Load more</button> : null}
           </div>
         }
       </div>
