@@ -37,7 +37,7 @@ const Header = (props: Props) => {
   return (
     <header className="sticky top-0 w-full bg-custom-100 px-5 md:px-20 pt-3">
       <div className="flex justify-between mx-auto my-0">
-        <h3 className='text-4xl text-custom-300'>
+        <h3 className='text-5xl text-custom-300'>
           <a href="/" className="">
             {props.title}
           </a>

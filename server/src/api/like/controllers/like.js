@@ -64,6 +64,7 @@ module.exports = createCoreController('api::like.like', ({ strapi }) => ({
           liked: body.liked,
           postId: body.postId,
           userId: body.userId,
+          api: body.api,
           publishedAt: new Date(),
         }
       })
@@ -111,5 +112,23 @@ module.exports = createCoreController('api::like.like', ({ strapi }) => ({
     } else {
       ctx.body = "An error occurred."
     }
+  },
+
+  me: async (ctx) => {
+    const pluralize = require('pluralize');
+    const entries = await strapi.db.query("api::like.like").findPage(ctx.params.page, 10,{
+      where: { userId: ctx.params.userId }
+    })
+    let likes = [];
+    for(var i = 0; i < entries.results.length; i++) {
+      const post = await strapi.db.query(`api::${pluralize.singular(entries.results[i].api)}.${pluralize.singular(entries.results[i].api)}`).findOne({
+        where: { id: entries.results[i].postId }
+      });
+      let entryCp = {...entries.results[i]}
+      entryCp.title = post.title
+      likes.push(entryCp);
+    }
+
+    ctx.body = likes;
   }
 }));

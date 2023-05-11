@@ -25,6 +25,14 @@ module.exports = {
       config: {
         policies: []
       }
+    },
+    {
+      method: 'GET',
+      path: '/likes/me/:userId/:page',
+      handler: 'like.me',
+      config: {
+        policies: []
+      }
     }
   ]
 }

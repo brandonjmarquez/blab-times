@@ -18,7 +18,8 @@ const Likes = (props: Props) => {
     const getLikes = async () => {
       const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
       await getLiked(decodedJwt.id);
-      const likes =  await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[liked][$eq]=true`);
+      console.log(props.api);
+      // const likes =  await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[liked][$eq]=true`);
       const countLikes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/count-likes/${props.api}/${props.postId}`)
       return countLikes
     };
@@ -35,9 +36,12 @@ const Likes = (props: Props) => {
 
   const getLiked = async (id: number) => {
     try {
-      const liked = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[userId][$eq]=${id}`)
+      const liked = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[userId][$eq]=${id}`);
+      console.log(liked.data);
       if(liked.data.data.length === 1)
         setLiked(liked.data.data[0])
+      else
+        setLiked
         
     } catch(err) {
       setResponseMessage("There was an error fetching the amount of likes.");
@@ -97,7 +101,7 @@ const Likes = (props: Props) => {
     <div>
       <p className="font-extrabold">Likes</p>
       <button 
-        className={`${Object.keys(liked).length > 0 ? (liked.attributes.liked ? 'text-red-400 hover:text-red-400' : 'text-custom-200') : ""} hover:text-black hover:bg-green-300 text-6xl bg-custom-300 px-1 py-2 rounded-full`} 
+        className={`${Object.keys(liked).length > 0 ? (liked.attributes.liked ? 'text-red-400 hover:text-red-400' : 'text-custom-200') : 'text-custom-200'} hover:text-black hover:bg-green-300 text-6xl bg-custom-300 px-1 py-2 rounded-full`} 
         onClick={async () => like()}
       >{'<3'}</button>
       <span> {likes}</span>

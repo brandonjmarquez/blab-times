@@ -18,5 +18,13 @@ module.exports = {
         policies: []
       }
     },
+    {
+      method: 'GET',
+      path: '/comments/me/:userId/:page',
+      handler: 'comment.me',
+      config: {
+        policies: []
+      }
+    }
   ]
 }

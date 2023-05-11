@@ -52,5 +52,29 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
 
   delete: async (ctx) => {
 
+  },
+
+  me: async (ctx) => {
+    const pluralize = require('pluralize');
+    const entries = await strapi.db.query("api::comment.comment").findMany({
+      where: { userId: ctx.params.userId },
+      orderBy: { publishedAt: 'desc' },
+      offset: 1 + ctx.params.page * 10,
+      limit: 10
+    });
+    console.log(entries, 1 + ctx.params.page * 10)
+    let comments = [];
+    if(entries.length > 0)
+      for(var i = 0; i < entries.length; i++) {
+        const post = await strapi.db.query(`api::${pluralize.singular(entries[i].api)}.${pluralize.singular(entries[i].api)}`).findOne({
+          where: { id: entries[i].postId }
+        });
+        let entryCp = {...entries[i]}
+
+        entryCp.title = post.title
+        comments.push(entryCp);
+      }
+
+    ctx.body = comments;
   }
 }));
