@@ -57,6 +57,8 @@ const Header = (props: Props) => {
         </div>
       </div>
       <hr></hr>
+      <div className="flex justify-center"><hr className="w-5/6 my-0"></hr></div>
+      
     </header>
   );
 };

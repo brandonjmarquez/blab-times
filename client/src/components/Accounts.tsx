@@ -122,7 +122,7 @@ const Accounts = (props: Props) => {
                 </div>
               )
             })}
-            {likes.length % 10 === 0 ? <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={() => setLikesPage(likesPage + 1)}>Load more</button> : null}
+            {likes.length % 10 === 0 && likes.length !== 0 ? <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={() => setLikesPage(likesPage + 1)}>Load more</button> : null}
           </div>
           :
           <div>

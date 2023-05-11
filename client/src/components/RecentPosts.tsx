@@ -57,7 +57,7 @@ const RecentPosts = (props: Props) => {
         }
       }
       sorted.current = !sorted.current;
-      return postsSorted;
+      return postsSorted.slice(0, 6);
     }
     if(!sorted.current && posts.length > 0) {
       setPosts(sortPosts());
