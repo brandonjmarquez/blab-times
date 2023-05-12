@@ -7,6 +7,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import Header from '../components/Header';
 import RecentPosts from '../components/RecentPosts';
 import axios from 'axios';
+import EmailSubscribe from '../components/EmailSubscribe';
 
 const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`)
 const { data } = await response.data;
@@ -31,6 +32,8 @@ const { home } = data.attributes;
 							</p>
 						)
 					})}
+					<br>
+					<EmailSubscribe ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 				</div>
 				<RecentPosts ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 			</div>

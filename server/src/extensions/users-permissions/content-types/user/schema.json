@@ -66,6 +66,11 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
+    },
+    "subscribed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": true
     }
   }
 }

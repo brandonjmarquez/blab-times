@@ -101,13 +101,13 @@ module.exports = createCoreController('api::like.like', ({ strapi }) => ({
         where: { id: entry.id },
         data: {
           liked: body.liked,
-          api: entry.api,
-          postId: entry.postId,
-          userId: entry.userId,
-          username: entry.username,
+          // api: entry.api,
+          // postId: entry.postId,
+          // userId: entry.userId,
+          // username: entry.username,
           publishedAt: new Date(),
         }
-      })
+      });
       ctx.body = "Successfully changed liked."
     } else {
       ctx.body = "An error occurred."

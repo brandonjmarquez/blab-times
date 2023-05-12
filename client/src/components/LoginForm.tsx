@@ -8,16 +8,6 @@ interface Props {
 
 const LoginForm = (props: Props) => {
   const [responseMessage, setResponseMessage] = useState("");
-  const [credentials, setCredentials] = useState<{email: string, password: string}>({email: "", password: ""})
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    return setCredentials((credentials) => {
-      let state = {...credentials};
-      state[e.target.id as keyof typeof state] = e.target.value;
-
-      return state;
-    })
-  }
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +41,6 @@ const LoginForm = (props: Props) => {
             name="identifier"
             className="text-sm outline-none pb-5 w-full border-b rounded-md hover:border-blue-700 focus:border-blue-700"
             autoComplete="off"
-            onChange={(e) => handleChange(e)}
           ></input>
         </div>
         <div className="my-2">
@@ -62,7 +51,6 @@ const LoginForm = (props: Props) => {
             name="password"
             className="text-sm outline-none pb-5 w-full border-b rounded-md hover:border-blue-700 focus:border-blue-700"
             autoComplete="off"
-            onChange={(e) => handleChange(e)}
           ></input>
         </div>
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
