@@ -68,11 +68,21 @@ const RecentPosts = (props: Props) => {
     <div className="md:w-1/5">
       <h4 className="font-bold text-center">Recent Posts</h4>
       <ul>
-        {posts.map((post: any, index: number) => {
+        {posts.length > 0 ? posts.map((post: any, index: number) => {
           const title = post.attributes.title.length < 32 ? post.attributes.title : post.attributes.title.substring(0, 32) + "..."
           let date = new Date(post.attributes.publishedAt);
-          return <div key={index}><li className="flex justify-center text-center"><a href={`/${post.attributes.api}/${post.id}`} className="text-custom-200"><p className="underline">{title} </p><p>{date.toLocaleDateString()}</p></a></li><hr></hr></div>
-        })}
+          return (
+            <div key={index}>
+              <li className="flex justify-center text-center">
+                <a href={`/${post.attributes.api}/${post.id}`} className="text-custom-200">
+                  <p className="underline">{title}</p>
+                  <p>{date.toLocaleDateString()}</p>
+                </a>
+              </li>
+              <hr></hr>
+            </div>
+          )
+        }) : <p className="text-center">No recent posts found...</p>}
       </ul>
     </div>
   )

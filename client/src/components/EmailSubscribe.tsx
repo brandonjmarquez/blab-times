@@ -29,7 +29,7 @@ const EmailSubscribe = (props: Props) => {
   }
 
   return (
-    <form className="flex flex-col justify-center w-3/4 md:w-1/2 m-auto" onSubmit={subscribe}>
+    <form className="flex flex-col justify-center w-full md:w-1/2 m-auto" onSubmit={subscribe}>
       <p className="text-center">Subscribe to my posts!</p>
       <input type="email" id="email" name="email" className="rounded-3xl p-3" placeholder="Enter your email..."></input>
       <br></br>
