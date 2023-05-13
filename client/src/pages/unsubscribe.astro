@@ -1,0 +1,27 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+import Header from '../components/Header';
+import Unsubscribe from '../components/Unsubscribe';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
+		<main>
+			<div class="flex flex-col justify-center md:flex-row">
+				<div class="flex-grow-[.25]">
+					<h1 class="text-center">Unsubscribe</h1>
+          <Unsubscribe ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

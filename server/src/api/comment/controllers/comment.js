@@ -10,6 +10,7 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
   lastMinute: async (ctx) => {
     const current = new Date();
     const minuteAgo = new Date(current.valueOf() - 60000);
+    const decodedJwt = require('jwt-decode')(ctx.request.header.authorization.replace("Bearer ", ""));
     const entry = await strapi.db.query("api::comment.comment").findOne({
       where: {
         $and: [
@@ -20,7 +21,7 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
           },
           {
             userId: {
-              $eq: ctx.params.userId
+              $eq: decodedJwt.id
             }
           }
         ]
@@ -51,15 +52,54 @@ module.exports = createCoreController('api::comment.comment', ({ strapi }) => ({
   },
 
   delete: async (ctx) => {
+    const decodedJwt = require('jwt-decode')(ctx.request.header.authorization.replace("Bearer ", ""));
+    const entry = await strapi.db.query("api::comment.comment").findOne({
+      where: { 
+        $and: [
+          {
+            userId: {
+              $eq: decodedJwt.id
+            }
+          },
+          {
+            id: {
+              $eq: ctx.params.id
+            }
+          }
+        ]
+      }
+    });
 
+    if(entry) {
+      const deleteComment = await strapi.db.query("api::comment.comment").delete({
+        where: {
+          $and: [
+            {
+              userId: {
+                $eq: decodedJwt.id
+              }
+            },
+            {
+              id: {
+                $eq: ctx.params.id
+              }
+            }
+          ]
+        }
+      });
+      ctx.body = "Successfully deleted comment."
+    } else {
+      ctx.body = "An error occurred."
+    }
   },
 
   me: async (ctx) => {
     const pluralize = require('pluralize');
+    const decodedJwt = require('jwt-decode')(ctx.request.header.authorization.replace("Bearer ", ""));
     const entries = await strapi.db.query("api::comment.comment").findMany({
-      where: { userId: ctx.params.userId },
+      where: { userId: decodedJwt.id },
       orderBy: { publishedAt: 'desc' },
-      offset: 1 + ctx.params.page * 10,
+      offset: 0 + ctx.params.page * 10,
       limit: 10
     });
     let comments = [];

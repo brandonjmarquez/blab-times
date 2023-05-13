@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import PasswordReset from "./PasswordReset";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
@@ -15,60 +15,90 @@ const Accounts = (props: Props) => {
   const [comments, setComments] = useState<any>([]);
   const [likesPage, setLikesPage] = useState(0);
   const [commentsPage, setCommentsPage] = useState(0);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const getMe = async () => {
-    try {
+    // try {
       const me = await axios.get(`${props.ASTRO_BACKEND_URL}/api/users/me`, {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
           "Authorization": `Bearer ${sessionStorage.getItem("jwt")}`
-      }});
-      const { data } = me;
-      setUserData(data)
-    } catch(err) {
-      console.log(err)
-    }
+      }}).then((res) => {
+        const { data } = res;
+        setUserData(data);
+        setIsSubscribed(data.subscribed)
+      }).catch((err) => console.log(err));
+      // const { data } = me;
+      // setUserData(data)
+      // console.log(data)
+    // } catch(err) {
+    //   console.log(err)
+    // }
   }
 
   const changePassword = async (e: MouseEvent) => {
     e.preventDefault();
-    try {
+    // try {
       const resetPw = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/forgot-password`, {
         email: userData.email
-      })
-      setResponseMessage("Password reset email successfully sent.");
-    } catch(err: any) {
-      console.log("An error occured: ", err.response)
-    }
+      }).then(() => setResponseMessage("Password reset email successfully sent."))
+      .catch((err) => setResponseMessage("An error occured: " + err.response))
+      // setResponseMessage("Password reset email successfully sent.");
+    // } catch(err: any) {
+    //   console.log("An error occured: ", err.response)
+    // }
   }
 
   const getLikes = async () => {
-    try {
+    // try {
       const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
-      const likes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/me/${decodedJwt.id}/${likesPage}`, {
+      const likes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/me/${likesPage}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
-      });
-      setLikes((likesOld: any) => [...likesOld, ...likes.data]);
-    } catch(err) {
-      setResponseMessage("There was an error loading your data.")
-    }
+      }).then((res) => setLikes((likesOld: any) => [...likesOld, ...res.data]))
+      .catch((err) => setResponseMessage("There was an error loading your data."));
+      // setLikes((likesOld: any) => [...likesOld, ...likes.data]);
+    // } catch(err) {
+    //   setResponseMessage("There was an error loading your data.")
+    // }
   }
 
   const getComments = async () => {
-    try {
+    // try {
       const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
-      const comments = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/me/${decodedJwt.id}/${commentsPage}`, {
+      const comments = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/me/${commentsPage}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
-      });
-      setComments((commentsOld: any) => [...commentsOld, ...comments.data]);
-      console.log(comments.data)
-    } catch(err) {
-      setResponseMessage("There was an error loading your data.")
+      }).then((res) => setComments((commentsOld: any) => [...commentsOld, ...res.data]))
+      .catch((err) => setResponseMessage("There was an error loading your data."));
+    //   setComments((commentsOld: any) => [...commentsOld, ...comments.data]);
+    // } catch(err) {
+    //   setResponseMessage("There was an error loading your data.")
+    // }
+  }
+
+  const subscribe = async (e: ChangeEvent) => {
+    const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
+    console.log(e, (e.target as HTMLInputElement).checked)
+    if(isSubscribed) {
+      const subscribe = await axios.delete(`${props.ASTRO_BACKEND_URL}/api/subscribeds/${userData.email}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+        }
+      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data)})
+    } else {
+      const subscribe = await axios.post(`${props.ASTRO_BACKEND_URL}/api/subscribeds/`, {
+        data: {
+          email: userData.email
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+        }
+      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data)})
     }
   }
 
@@ -81,7 +111,6 @@ const Accounts = (props: Props) => {
   }, [likesPage]);
 
   useEffect(() => {
-    console.log(commentsPage);
     getComments();
   }, [commentsPage]);
 
@@ -92,6 +121,7 @@ const Accounts = (props: Props) => {
         <p>Username: {userData.username}</p>
         <p>Email: {userData.email}</p>
         <p>Email Confirmed: {userData.confirmed ? "Confirmed" : "Unconfirmed"}</p>
+        <p>Subscribed: <input type="checkbox" checked={isSubscribed} onChange={subscribe}></input></p>
         <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={changePassword}>Reset Password</button>
         <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md mx-2" onClick={() => {sessionStorage.removeItem("jwt"); location.replace("/")}}>Logout</button>
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}

@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "method": "PUT",
+      "path": "/users",
+      "handler": "user.unsubscribe",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

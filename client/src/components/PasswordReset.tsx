@@ -15,8 +15,8 @@ const PasswordReset = (props: Props) => {
         a[key] = value;
         return a;
       }, {});
-    console.log(formData)
-    try {
+
+      try {
       const qs = queryString.parse(location.search)
       const resetPw = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/reset-password`, {
         code: qs.code,

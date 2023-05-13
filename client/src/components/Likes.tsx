@@ -18,8 +18,7 @@ const Likes = (props: Props) => {
     const getLikes = async () => {
       const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
       await getLiked(decodedJwt.id);
-      console.log(props.api);
-      // const likes =  await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[liked][$eq]=true`);
+
       const countLikes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/count-likes/${props.api}/${props.postId}`)
       return countLikes
     };
@@ -37,7 +36,7 @@ const Likes = (props: Props) => {
   const getLiked = async (id: number) => {
     try {
       const liked = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes?populate=*&filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&filters[userId][$eq]=${id}`);
-      console.log(liked.data);
+
       if(liked.data.data.length === 1)
         setLiked(liked.data.data[0])
       else
@@ -49,8 +48,8 @@ const Likes = (props: Props) => {
   }
 
   const like = async () => {
-    const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
-    try {
+    if(sessionStorage.getItem("jwt")) {
+      const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
       if(Object.keys(liked).length === 0) {
         const setLike = await axios.post(`${props.ASTRO_BACKEND_URL}/api/likes`, {
           liked: true,
@@ -61,10 +60,8 @@ const Likes = (props: Props) => {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
           }
-        });
-        setLikes((likes: number) => {
-          return likes + 1;
-        })
+        }).then(() => setLikes((likes: number) => { return likes + 1; }))
+        .catch((err) => setResponseMessage(err.message));
         getLiked(decodedJwt.id);
       } else {
         const setLike = await axios.put(`${props.ASTRO_BACKEND_URL}/api/likes`, {
@@ -76,24 +73,26 @@ const Likes = (props: Props) => {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
           }
-        });
-        setLikes((likes: number) => {
-          if(liked.attributes.liked) {
-            return likes - 1;
-          } else {
-            return likes + 1;
-          }
-        })
-        setLiked((liked: any) => {
-          let state = {...liked};
-          let { attributes } = liked;
-          attributes.liked = !liked.attributes.liked;
-          state.attributes = attributes;
-          return state;
-        });
+        }).then(() => {
+          setLikes((likes: number) => {
+            if(liked.attributes.liked) {
+              return likes - 1;
+            } else {
+              return likes + 1;
+            }
+          });
+          setLiked((liked: any) => {
+            let state = {...liked};
+            let { attributes } = liked;
+  
+            attributes.liked = !liked.attributes.liked;
+            state.attributes = attributes;
+            return state;
+          });
+        }).catch((err) => setResponseMessage(err.message));
       }
-    } catch(err) {
-      setResponseMessage("Please login to leave a like.");
+    } else {
+      setResponseMessage("Please login to leave a like.")
     }
   }
 
@@ -102,7 +101,7 @@ const Likes = (props: Props) => {
       <p className="font-extrabold">Likes</p>
       <button 
         className={`${Object.keys(liked).length > 0 ? (liked.attributes.liked ? 'text-red-400 hover:text-red-400' : 'text-custom-200') : 'text-custom-200'} hover:text-black hover:bg-green-300 text-6xl bg-custom-300 px-1 py-2 rounded-full`} 
-        onClick={async () => like()}
+        onClick={like}
       >{'<3'}</button>
       <span> {likes}</span>
       <p className="text-red-500">{responseMessage}</p>

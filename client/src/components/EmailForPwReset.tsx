@@ -25,7 +25,6 @@ const EmailForPwReset = (props: Props) => {
       window.sessionStorage.setItem('jwt', jwt);
       setResponseMessage("Email successfully sent.")
     } catch(err: any) {
-      console.log(err.response.data.error.message)
       setResponseMessage(err.response.data.error.message)
     }
   }

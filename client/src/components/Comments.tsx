@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import DeleteComment from './DeleteComment';
 
 interface Props {
   api: string;
@@ -16,11 +17,13 @@ const Comments = (props: Props) => {
 
   useEffect(() => {
     const getComments = async () => {
-      //  axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/get-comments/${props.api}/${props.postId}`).then((res) => console.log(res.data));
       return await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments?filters[api][$eq]=${props.api}&filters[postId][$eq]=${props.postId}&pagination[page]=${page}&sort[0]=id%3Adesc&populate=*`);
     };
     
-    getComments().then((res) => {setPagination(res.data.meta.pagination); setComments((comments) => [...comments, ...res.data.data]); console.log(res.data.data)})
+    getComments().then((res) => {
+      setPagination(res.data.meta.pagination); 
+      setComments((comments) => [...comments, ...res.data.data])
+    });
   }, [page]);
 
   const comment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,7 +81,6 @@ const Comments = (props: Props) => {
       }
         
     } catch(err: any) {
-      console.log()
       setResponseMessage(err.response.data.error.message)
     }
   }
@@ -96,7 +98,7 @@ const Comments = (props: Props) => {
       {
         comments.map((commentInfo: any, index: number) => {
           const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt") ?? "")
-          console.log(commentInfo , decodedJwt.id);
+
           return (
             <div key={index} className="border-2 px-2">
               <p className="flex font-bold justify-between">
@@ -118,7 +120,7 @@ const Comments = (props: Props) => {
               </p>
               <p className="flex justify-between">
                 <span className="whitespace-break-spaces">{commentInfo.attributes.comment}</span>
-                {commentInfo.attributes.userId === decodedJwt.id && <span>delete</span>}
+                <DeleteComment ASTRO_BACKEND_URL={props.ASTRO_BACKEND_URL} commentInfo={commentInfo} decodedJwt={decodedJwt}/>
               </p>
             </div>
           )

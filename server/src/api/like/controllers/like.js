@@ -116,14 +116,16 @@ module.exports = createCoreController('api::like.like', ({ strapi }) => ({
 
   me: async (ctx) => {
     const pluralize = require('pluralize');
+    const decodedJwt = require('jwt-decode')(ctx.request.header.authorization.replace("Bearer ", ""));
     const entries = await strapi.db.query("api::like.like").findMany({
-      where: { userId: ctx.params.userId },
+      where: { userId: decodedJwt.id },
       orderBy: { publishedAt: 'desc' },
-      offset: 1 + ctx.params.page * 10,
+      offset: 0 + ctx.params.page * 10,
       limit: 10
     })
     let likes = [];
-    if(entries.length > 0)
+
+    if(entries.length > 0) {
       for(var i = 0; i < entries.length; i++) {
         const post = await strapi.db.query(`api::${pluralize.singular(entries[i].api)}.${pluralize.singular(entries[i].api)}`).findOne({
           where: { id: entries[i].postId }
@@ -132,7 +134,7 @@ module.exports = createCoreController('api::like.like', ({ strapi }) => ({
         entryCp.title = post.title
         likes.push(entryCp);
       }
-    console.log(likes)
+    }
     ctx.body = likes;
   }
 }));

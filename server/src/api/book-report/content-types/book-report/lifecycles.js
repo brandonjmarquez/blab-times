@@ -23,7 +23,12 @@ module.exports = {
             from: process.env.SMTP_USERNAME, // e.g. single sender verification in SendGrid
             subject: 'Blab Times has a new post!',
             // text: '${fieldName}', // Replace with a valid field ID
-            html: `<h1>New Post Alert</h1><p>Check it out at the link below:</p><p><a href="https://blab-times.vercel.app/${event.result.api}/${event.result.id}">${event.result.title}</a></p>`,
+            html: `
+            <h1>New Post Alert</h1>
+            <p>Check it out at the link below:</p>
+            <p><a href="https://blab-times.vercel.app/${event.result.api}/${event.result.id}">${event.result.title}</a></p>
+            <br>
+            <p><a href="https://blab-times.vercel.app/unsubscribe#${entries[i].email}">Unsubscribe</a></p>`,
           });
         }
     } catch(err) {

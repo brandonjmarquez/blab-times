@@ -7,7 +7,7 @@ const Footer = () => {
 	return (
 		<>
 	<footer className="">
-		&copy; {today.getFullYear()} YOUR NAME HERE. All rights reserved.
+		&copy; {today.getFullYear()} Hanna Garetson. All rights reserved.
 	</footer>
 	<style>
 		{`

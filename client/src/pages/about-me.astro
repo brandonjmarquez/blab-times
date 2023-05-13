@@ -3,7 +3,7 @@
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Footer from '../components/Footer.astro';
 import axios from 'axios';
 
 const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/about?populate=*`)

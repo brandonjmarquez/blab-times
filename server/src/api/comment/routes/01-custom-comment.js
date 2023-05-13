@@ -19,8 +19,16 @@ module.exports = {
       }
     },
     {
+      method: 'DELETE',
+      path: '/comments/:id',
+      handler: 'comment.delete',
+      config: {
+        policies: []
+      }
+    },
+    {
       method: 'GET',
-      path: '/comments/me/:userId/:page',
+      path: '/comments/me/:page',
       handler: 'comment.me',
       config: {
         policies: []

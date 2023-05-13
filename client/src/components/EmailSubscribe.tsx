@@ -15,7 +15,7 @@ const EmailSubscribe = (props: Props) => {
         a[key] = value;
         return a;
       }, {});
-      console.log(formData)
+
       try {
         const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/subscribeds`, {
           data: {
@@ -29,7 +29,7 @@ const EmailSubscribe = (props: Props) => {
   }
 
   return (
-    <form className="flex flex-col justify-center w-1/2" onSubmit={subscribe}>
+    <form className="self-center flex flex-col justify-center w-1/2 m-auto" onSubmit={subscribe}>
       <p className="text-center">Subscribe to my posts!</p>
       <input type="email" id="email" name="email" className="rounded-3xl p-3" placeholder="Email"></input>
       <br></br>
