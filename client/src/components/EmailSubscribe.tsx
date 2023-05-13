@@ -29,9 +29,9 @@ const EmailSubscribe = (props: Props) => {
   }
 
   return (
-    <form className="self-center flex flex-col justify-center w-1/2 m-auto" onSubmit={subscribe}>
+    <form className="flex flex-col justify-center w-3/4 md:w-1/2 m-auto" onSubmit={subscribe}>
       <p className="text-center">Subscribe to my posts!</p>
-      <input type="email" id="email" name="email" className="rounded-3xl p-3" placeholder="Email"></input>
+      <input type="email" id="email" name="email" className="rounded-3xl p-3" placeholder="Enter your email..."></input>
       <br></br>
       <button type="submit" className="text-custom-200 bg-custom-300 hover:bg-green-300 rounded-3xl p-2">Subscribe</button>
       {responseMessage && <p className="text-red-500 text-center">{responseMessage}</p>}

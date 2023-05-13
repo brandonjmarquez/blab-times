@@ -9,7 +9,7 @@ import RecentPosts from '../components/RecentPosts';
 import axios from 'axios';
 import EmailSubscribe from '../components/EmailSubscribe';
 
-const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`)
+const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`);
 const { data } = await response.data;
 const { home } = data.attributes;
 ---

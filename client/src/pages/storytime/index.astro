@@ -35,18 +35,17 @@ const { data } = await response.data;
 	<body class="m-auto">
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
-			<section>
-				<ul>
-					{
-						data.map((post: any) => (
-							<li>
-								<FormattedDate date={post.attributes.publishedAt} />
-								<a href={`/storytime/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+			<h1 class="text-3xl font-bold text-custom-200">Storytime</h1>
+			<ul>
+				{
+					data.map((post: any) => (
+						<li>
+							<FormattedDate date={post.attributes.publishedAt} />
+							<a href={`/storytime/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
+						</li>
+					))
+				}
+			</ul>
 		</main>
 		<Footer />
 	</body>
