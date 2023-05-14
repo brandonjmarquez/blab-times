@@ -22,7 +22,7 @@ const EmailSubscribe = (props: Props) => {
             ...formData
           }
         });
-        setResponseMessage("Successfully subscribed!")
+        setResponseMessage(res.data)
       } catch(err: any) {
         setResponseMessage(err.response.data.error.message)
       }
