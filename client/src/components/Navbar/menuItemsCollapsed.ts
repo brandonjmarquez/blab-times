@@ -1,5 +1,5 @@
 export const menuItemsCollapsed = [{
-  title:'|||',
+  title:'☰',
   submenu: [
     {
       title: 'Home',

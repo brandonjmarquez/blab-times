@@ -5,6 +5,7 @@ const MenuItem = ({ buttonClassName, collapsed, liClassName, depthLevel, index, 
   const [dropdown, setDropdown] = useState(false);
   const ref = useRef<HTMLLIElement>(null);
 
+  const burger = items.title === '☰' ? "text-2xl" : "";
   const depthIs0 = depthLevel === 0 ? "rounded-md mx-1 " : "";
   const dropped = !collapsed && dropdown && depthLevel === 0 ? "rounded-md rounded-br-none " : "";
   const droppedColl = collapsed && dropdown && depthLevel === 0 ? "rounded-md rounded-b-none " : "";
@@ -37,7 +38,7 @@ const MenuItem = ({ buttonClassName, collapsed, liClassName, depthLevel, index, 
       {items.submenu ? (
         <>
           <button 
-            className={`inline-flex items-center text-custom-200 bg-custom-300 hover:bg-green-300 w-full p-3 ${dropped + droppedColl + undroppedLevel0 + undroppedLevel1}`}
+            className={`inline-flex items-center text-custom-200 bg-custom-300 hover:bg-green-300 w-full p-3 ${dropped + droppedColl + undroppedLevel0 + undroppedLevel1 + burger}`}
             type="button"
             aria-haspopup="menu"
             aria-expanded={dropdown ? "true" : "false"}
