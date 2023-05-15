@@ -19,7 +19,7 @@ module.exports = createCoreController('api::subscribed.subscribed', {
     })
     const entries = await strapi.db.query("api::subscribed.subscribed").delete({
       where: { id: entry.id },
-    }).then(() => ctx.body = "Successfully unsubscribed.");
+    }).then(() => ctx.body = "Email successfully unsubscribed.");
 
     if(user) {
       const unsubscribe = await strapi.db.query("plugin::users-permissions.user").update({
@@ -41,7 +41,7 @@ module.exports = createCoreController('api::subscribed.subscribed', {
       console.log(user.subscribed)
       const createSubscribe = await strapi.db.query("api::subscribed.subscribed").create({
         data: { email: ctx.request.body.data.email, publishedAt: new Date() },
-      }).then(() => ctx.body = "Successfully subscribed!");
+      }).then(() => ctx.body = "Email successfully subscribed!");
   
       if(user) {
         const subscribe = await strapi.db.query("plugin::users-permissions.user").update({
@@ -50,7 +50,7 @@ module.exports = createCoreController('api::subscribed.subscribed', {
         });
       }
     } else {
-      ctx.body = "Already Subscribed.";
+      ctx.body = "Email already subscribed.";
     }
   },
 
