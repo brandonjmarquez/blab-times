@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   collapsed: boolean;
+  username: string;
 }
 
 const Navbar = (props: Props) => {
@@ -58,11 +59,11 @@ const Navbar = (props: Props) => {
       { menu && menuCol ?
         props.collapsed ?
           menuCol.map((menu: any, index: number) => {
-            return <MenuItem collapsed={props.collapsed} index={index} depthLevel={depthLevel} items={menu} key={index} />
+            return <MenuItem collapsed={props.collapsed} index={index} depthLevel={depthLevel} items={menu} key={index} username={props.username} />
           })
           :
           menu.map((menu: any, index: number) => {
-            return <MenuItem collapsed={props.collapsed} index={index} depthLevel={depthLevel} items={menu} key={index} />
+            return <MenuItem collapsed={props.collapsed} index={index} depthLevel={depthLevel} items={menu} key={index} username={props.username} />
           }) : null
       }
     </ul>

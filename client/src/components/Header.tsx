@@ -24,15 +24,18 @@ const Header = (props: Props) => {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Authorization": `Bearer ${sessionStorage.getItem("jwt")}`
-        }})
-          await setUserData(res.data)
+        }}).then((res) => {
+          setUserData(res.data);
+        }).catch(() => {
+          return;
+        })
       } catch(err) {
         console.error(err)
       }
     }
     if(sessionStorage.getItem("jwt"))
       login();
-  }, [])
+  }, []);
 
   return (
     <header className="sticky top-0 w-full bg-custom-100 px-5 md:px-20 pt-3">
@@ -44,13 +47,13 @@ const Header = (props: Props) => {
         </h3>
         <div className="min-[1090px]:block hidden w-3/4">
           <nav>
-            <Navbar collapsed={false} />
+            <Navbar collapsed={false} username={userData ? userData.username : ""} />
           </nav>
         </div>
         <div className="flex flex-row">
           <div className="max-[1089px]:block hidden">
             <nav>
-              <Navbar collapsed={true} />
+              <Navbar collapsed={true} username={userData ? userData.username : ""} />
             </nav>
           </div>
         </div>

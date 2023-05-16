@@ -36,7 +36,7 @@ export const menuItemsCollapsed = [{
       ]
     },
     {
-      title: 'Account',
+      title: 'Hi {username}',
       url: '/account',
       loggedIn: true
     },
