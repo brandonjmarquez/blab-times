@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
+import Loader from "./Loader";
 
 interface Props {
   ASTRO_BACKEND_URL: string;
@@ -8,24 +9,23 @@ interface Props {
 
 const RegisterForm = (props: Props) => {
   const [responseMessage, setResponseMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const formData = [...new FormData(e.target as HTMLFormElement)]
       .reduce((a: any, [key, value]: any) => {
         a[key] = value;
         return a;
       }, {});
       
-    try {
-      const response = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local/register`, {
+      const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local/register`, {
         ...formData
-      });
-      const { data } = await response;
-      location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash)
-    } catch(err: any) {
-      setResponseMessage(err.response.data.error.message)
-    }
+      }).then((res) => {
+        location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash);
+        setLoading(false);
+      }).catch((err) => setResponseMessage(err.response.data.error.message));
   }
 
   return (
@@ -59,7 +59,7 @@ const RegisterForm = (props: Props) => {
         />
       </div>
       {responseMessage && <p className="text-red-500">{responseMessage}</p>}
-      <button type="submit" className="self-center text-custom-200 bg-custom-300 w-1/2 rounded-md py-2">Register</button>
+      <button type="submit" className="self-center text-custom-200 bg-custom-300 w-1/2 rounded-md py-2">{loading ? <Loader class="relative m-auto " /> : "Register"}</button>
     </form>
   );
 }

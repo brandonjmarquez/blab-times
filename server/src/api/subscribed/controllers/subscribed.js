@@ -36,21 +36,24 @@ module.exports = createCoreController('api::subscribed.subscribed', {
     const subscriber = await strapi.db.query("api::subscribed.subscribed").findOne({
       where: { email: ctx.request.body.data.email }
     })
-
-    if(!user.subscribed && !subscriber) {
-      console.log(user.subscribed)
-      const createSubscribe = await strapi.db.query("api::subscribed.subscribed").create({
-        data: { email: ctx.request.body.data.email, publishedAt: new Date() },
-      }).then(() => ctx.body = "Email successfully subscribed!");
-  
-      if(user) {
-        const subscribe = await strapi.db.query("plugin::users-permissions.user").update({
-          where: { email: ctx.request.body.data.email },
-          data: { subscribed: true }
-        });
+    if(user) {
+      if(!user.subscribed && !subscriber) {
+        console.log(user.subscribed)
+        const createSubscribe = await strapi.db.query("api::subscribed.subscribed").create({
+          data: { email: ctx.request.body.data.email, publishedAt: new Date() },
+        }).then(() => ctx.body = "Email successfully subscribed!");
+    
+        if(user) {
+          const subscribe = await strapi.db.query("plugin::users-permissions.user").update({
+            where: { email: ctx.request.body.data.email },
+            data: { subscribed: true }
+          });
+        }
+      } else {
+        ctx.body = "Email already subscribed.";
       }
     } else {
-      ctx.body = "Email already subscribed.";
+      ctx.body = "Please input a valid email."
     }
   },
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import Loader from './Loader';
 
 interface Props {
   ASTRO_BACKEND_URL: string;
@@ -7,6 +8,7 @@ interface Props {
 
 const RecentPosts = (props: Props) => {
   const [posts, setPosts] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
   const sorted = useRef(false);
 
   useEffect(() => {
@@ -26,6 +28,7 @@ const RecentPosts = (props: Props) => {
 
     const getPosts = async () => {
       await fetchPosts().then((datas) => {
+        setLoading(false);
         setPosts(() => {
           let data: any = []
           datas.forEach((post: any) => {
@@ -82,7 +85,11 @@ const RecentPosts = (props: Props) => {
               <hr></hr>
             </div>
           )
-        }) : <p className="text-center">No recent posts found...</p>}
+        }) : loading ?
+          <Loader class="relative m-auto" /> 
+          : 
+          <p className="text-center">No recent posts found...</p>
+        }
       </ul>
     </div>
   )

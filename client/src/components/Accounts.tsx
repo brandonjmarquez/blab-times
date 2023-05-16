@@ -2,6 +2,7 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import PasswordReset from "./PasswordReset";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import Loader from "./Loader";
 
 interface Props {
   ASTRO_BACKEND_URL: string;
@@ -16,6 +17,10 @@ const Accounts = (props: Props) => {
   const [likesPage, setLikesPage] = useState(0);
   const [commentsPage, setCommentsPage] = useState(0);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [loadingChangePw, setLoadingChangePw] = useState(false);
+  const [loadingSub, setLoadingSub] = useState(false);
+  const [loadingLikes, setLoadingLikes] = useState(true);
+  const [loadingComments, setLoadingComments] = useState(true);
 
   const getMe = async () => {
     // try {
@@ -29,66 +34,54 @@ const Accounts = (props: Props) => {
         setUserData(data);
         setIsSubscribed(data.subscribed)
       }).catch((err) => console.log(err));
-      // const { data } = me;
-      // setUserData(data)
-      // console.log(data)
-    // } catch(err) {
-    //   console.log(err)
-    // }
   }
 
   const changePassword = async (e: MouseEvent) => {
     e.preventDefault();
-    // try {
-      const resetPw = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/forgot-password`, {
-        email: userData.email
-      }).then(() => setResponseMessage("Password reset email successfully sent."))
-      .catch((err) => setResponseMessage("An error occured: " + err.response))
-      // setResponseMessage("Password reset email successfully sent.");
-    // } catch(err: any) {
-    //   console.log("An error occured: ", err.response)
-    // }
+    setLoadingChangePw(true);
+    const resetPw = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/forgot-password`, {
+      email: userData.email
+    }).then(() => {
+      setResponseMessage("Password reset email successfully sent.")
+      setLoadingChangePw(false);
+  })
+    .catch((err) => setResponseMessage("An error occured: " + err.response))
   }
 
   const getLikes = async () => {
-    // try {
-      const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
-      const likes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/me/${likesPage}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
-        }
-      }).then((res) => setLikes((likesOld: any) => [...likesOld, ...res.data]))
-      .catch((err) => setResponseMessage("There was an error loading your data."));
-      // setLikes((likesOld: any) => [...likesOld, ...likes.data]);
-    // } catch(err) {
-    //   setResponseMessage("There was an error loading your data.")
-    // }
+    const likes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/me/${likesPage}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+      }
+    }).then((res) => {
+      setLikes((likesOld: any) => [...likesOld, ...res.data]);
+      setLoadingLikes(false);
+    }).catch((err) => setResponseMessage("There was an error loading your data."));
   }
 
   const getComments = async () => {
-    // try {
-      const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
-      const comments = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/me/${commentsPage}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
-        }
-      }).then((res) => setComments((commentsOld: any) => [...commentsOld, ...res.data]))
-      .catch((err) => setResponseMessage("There was an error loading your data."));
-    //   setComments((commentsOld: any) => [...commentsOld, ...comments.data]);
-    // } catch(err) {
-    //   setResponseMessage("There was an error loading your data.")
-    // }
+    const comments = await axios.get(`${props.ASTRO_BACKEND_URL}/api/comments/me/${commentsPage}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+      }
+    }).then((res) => {
+      setComments((commentsOld: any) => [...commentsOld, ...res.data]);
+      setLoadingComments(false);
+    }).catch((err) => {
+      setResponseMessage("There was an error loading your data.");
+    });
   }
 
   const subscribe = async (e: ChangeEvent) => {
     const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
+    setLoadingSub(true);
     console.log(e, (e.target as HTMLInputElement).checked)
     if(isSubscribed) {
       const subscribe = await axios.delete(`${props.ASTRO_BACKEND_URL}/api/subscribeds/${userData.email}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
-      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data)})
+      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data); setLoadingSub(false);})
     } else {
       const subscribe = await axios.post(`${props.ASTRO_BACKEND_URL}/api/subscribeds/`, {
         data: {
@@ -98,7 +91,7 @@ const Accounts = (props: Props) => {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
-      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data)})
+      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data); setLoadingSub(false);})
     }
   }
 
@@ -121,9 +114,11 @@ const Accounts = (props: Props) => {
         <p>Username: {userData.username}</p>
         <p>Email: {userData.email}</p>
         <p>Email Confirmed: {userData.confirmed ? "Confirmed" : "Unconfirmed"}</p>
-        <p>Subscribed: <input type="checkbox" checked={isSubscribed} onChange={subscribe}></input></p>
-        <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={changePassword}>Reset Password</button>
-        <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md mx-2" onClick={() => {sessionStorage.removeItem("jwt"); location.replace("/")}}>Logout</button>
+        <span className="block">Subscribed: <input type="checkbox" checked={isSubscribed} onChange={subscribe}></input>{loadingSub ? <Loader class="inline-block absolute m-0" /> : null}</span>
+        <div className="grid grid-cols-2">
+          <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={changePassword}>{loadingChangePw ? <Loader class="relative m-auto" /> : "Change Password"}</button>
+          <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md mx-2" onClick={() => {sessionStorage.removeItem("jwt"); location.replace("/")}}>Logout</button>
+        </div>
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
       </div>
       <div className="md:w-2/3 my-2">
@@ -131,8 +126,8 @@ const Accounts = (props: Props) => {
         <button id="comments-button" className={`text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md ${!showLikes ? "bg-green-300" : ""}`} onClick={() => setShowLikes(false)}>Comments</button>
         {
           showLikes ? 
-          <div>
-            {likes.map((like: any, index: number) => {
+          !loadingLikes ? <div>
+            {likes.length > 0 ? likes.map((like: any, index: number) => {
               return (
                 <div key={index}>
                   <p><a href={`/${like.api}/${like.postId}`}>{like.title}</a>
@@ -151,12 +146,12 @@ const Accounts = (props: Props) => {
                   </p>
                 </div>
               )
-            })}
+            }) : <p>No Likes to display...</p>}
             {likes.length % 10 === 0 && likes.length !== 0 ? <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={() => setLikesPage(likesPage + 1)}>Load more</button> : null}
-          </div>
+          </div> : <Loader class="relative m-1" /> 
           :
-          <div>
-            {comments.map((comment: any, index: number) => {
+          !loadingComments ? <div>
+            {comments.length > 0 ? comments.map((comment: any, index: number) => {
               return (
                 <div key={index}>
                   <p className="font-bold border-l-2 border-l-black">
@@ -179,9 +174,9 @@ const Accounts = (props: Props) => {
                   <p className="border-2 border-solid border-black p-2">{comment.comment}</p>
                 </div>
               )
-            })}
+            }) : <p>No Comments to display...</p>}
             {comments.length % 10 === 0 && comments.length !== 0 ? <button className="text-custom-200 bg-custom-300 hover:bg-green-300 p-2 rounded-md" onClick={() => setCommentsPage(commentsPage + 1)}>Load more</button> : null}
-          </div>
+          </div> : <Loader class="relative m-1" /> 
         }
       </div>
     </div>
