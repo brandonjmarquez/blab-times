@@ -23,17 +23,16 @@ const Accounts = (props: Props) => {
   const [loadingComments, setLoadingComments] = useState(true);
 
   const getMe = async () => {
-    // try {
-      const me = await axios.get(`${props.ASTRO_BACKEND_URL}/api/users/me`, {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem("jwt")}`
-      }}).then((res) => {
-        const { data } = res;
-        setUserData(data);
-        setIsSubscribed(data.subscribed)
-      }).catch((err) => console.log(err));
+    const me = await axios.get(`${props.ASTRO_BACKEND_URL}/api/users/me`, {
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.getItem("jwt")}`
+    }}).then((res) => {
+      const { data } = res;
+      setUserData(data);
+      setIsSubscribed(data.subscribed)
+    }).catch((err) => console.log(err));
   }
 
   const changePassword = async (e: MouseEvent) => {

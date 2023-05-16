@@ -24,8 +24,6 @@ const EmailForPwReset = (props: Props) => {
         ...formData
       }).then((res) => {
         setLoading(false)
-        const { jwt, user } = res.data;
-        window.sessionStorage.setItem('jwt', jwt);
         setResponseMessage("Email successfully sent.")
       });
     } catch(err: any) {

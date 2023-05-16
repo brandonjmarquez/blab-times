@@ -15,7 +15,7 @@ const Navbar = (props: Props) => {
   const [removedButton, setRemovedButton] = useState(false);
 
   useEffect(() => {
-    const loggedIn = sessionStorage.getItem('jwt') === null ? false : true;
+    const loggedIn = sessionStorage.getItem('jwt') === null || sessionStorage.getItem('jwt') === 'undefined' ? false : true;
     if(!removedButton) {
       if(loggedIn) {
         // Remove "Login" button
