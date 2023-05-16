@@ -25,7 +25,10 @@ const RegisterForm = (props: Props) => {
       }).then((res) => {
         location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash);
         setLoading(false);
-      }).catch((err) => setResponseMessage(err.response.data.error.message));
+      }).catch((err) => {
+        setResponseMessage(err.response.data.error.message)
+        setLoading(false);
+      });
   }
 
   return (

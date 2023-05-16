@@ -28,7 +28,10 @@ const PasswordReset = (props: Props) => {
         setLoading(false);
         location.replace(props.ASTRO_FRONTEND_URL + '/login')
       })
-      .catch((err) => setResponseMessage('An error occurred: ' + err.response.data.error.message))
+      .catch((err) => {
+        setResponseMessage('An error occurred: ' + err.response.data.error.message);
+        setLoading(false);
+      });
 
       
   }
