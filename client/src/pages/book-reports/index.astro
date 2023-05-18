@@ -36,16 +36,19 @@ const { data } = await response.data;
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<h1 class="text-3xl font-bold text-custom-200">Book Reports</h1>
-			<ul>
+			
 				{
-					data.length > 0 ? data.reverse().map((post: any) => (
-						<li>
-							<FormattedDate date={post.attributes.publishedAt} />
-							<a href={`/book-reports/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
-						</li>
-					)) : <p>No Posts Found...</p>
+					data.length > 0 ? 
+					<ul>
+						{data.reverse().map((post: any) => (
+							<li>
+								<FormattedDate date={post.attributes.publishedAt} />
+								<a href={`/book-reports/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
+							</li>
+						
+						))}
+					</ul> : <p>No Posts Found...</p>
 				}
-			</ul>
 		</main>
 		<Footer />
 	</body>
