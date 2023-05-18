@@ -21,12 +21,13 @@ const LoginForm = (props: Props) => {
         return a;
       }, {});
 
-    const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local`, {
+    const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/users-permissions/auth/local`, {
       ...formData
     }).then((res) => {
       const { jwt } = res.data;
       setLoading(false);
       sessionStorage.setItem('jwt', jwt);
+      setResponseMessage(res.data.message ?? "");
       location.replace(props.ASTRO_FRONTEND_URL + location.hash.substring(1));
     }).catch((err) => {
       setResponseMessage(err.response.data.error.message);

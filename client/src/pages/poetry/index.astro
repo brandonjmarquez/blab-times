@@ -38,12 +38,12 @@ const { data } = await response.data;
 			<h1 class="text-3xl font-bold text-custom-200">Poetry</h1>
 			<ul>
 				{
-					data.map((post: any) => (
+					data.length > 0 ? data.map((post: any) => (
 						<li>
 							<FormattedDate date={post.attributes.publishedAt} />
 							<a href={`/poetry/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
 						</li>
-					))
+					)) : <p>No Posts Found...</p>
 				}
 			</ul>
 		</main>

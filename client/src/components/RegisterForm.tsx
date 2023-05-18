@@ -12,7 +12,7 @@ const RegisterForm = (props: Props) => {
   const [loading, setLoading] = useState(false);
 
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
     setLoading(true);
     const formData = [...new FormData(e.target as HTMLFormElement)]
       .reduce((a: any, [key, value]: any) => {
@@ -23,9 +23,11 @@ const RegisterForm = (props: Props) => {
       const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local/register`, {
         ...formData
       }).then((res) => {
-        location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash);
+        console.log(res)
         setLoading(false);
+        location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash);
       }).catch((err) => {
+        console.log(err)
         setResponseMessage(err.response.data.error.message)
         setLoading(false);
       });

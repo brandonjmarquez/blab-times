@@ -18,17 +18,15 @@ const EmailForPwReset = (props: Props) => {
         a[key] = value;
         return a;
       }, {});
-
-    try {
-      const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/forgot-password`, {
-        ...formData
-      }).then((res) => {
-        setLoading(false)
-        setResponseMessage("Email successfully sent.")
-      });
-    } catch(err: any) {
+    const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/forgot-password`, {
+      ...formData
+    }).then((res) => {
+      console.log(res)
+      setLoading(false);
+      setResponseMessage("Email successfully sent.");
+    }).catch((err) =>{
       setResponseMessage(err.response.data.error.message)
-    }
+    });
   }
 
   return (

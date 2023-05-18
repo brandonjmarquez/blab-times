@@ -8,7 +8,6 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::subscribed.subscribed', {
   delete: async (ctx) => {
-    console.log(ctx)
     const entry = await strapi.db.query("api::subscribed.subscribed").findOne({
       where: { 
         email: ctx.params.email
@@ -38,7 +37,6 @@ module.exports = createCoreController('api::subscribed.subscribed', {
     })
     if(user) {
       if(!user.subscribed && !subscriber) {
-        console.log(user.subscribed)
         const createSubscribe = await strapi.db.query("api::subscribed.subscribed").create({
           data: { email: ctx.request.body.data.email, publishedAt: new Date() },
         }).then(() => ctx.body = "Email successfully subscribed!");

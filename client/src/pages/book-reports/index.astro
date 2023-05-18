@@ -38,12 +38,12 @@ const { data } = await response.data;
 			<h1 class="text-3xl font-bold text-custom-200">Book Reports</h1>
 			<ul>
 				{
-					data.reverse().map((post: any) => (
+					data.length > 0 ? data.reverse().map((post: any) => (
 						<li>
 							<FormattedDate date={post.attributes.publishedAt} />
 							<a href={`/book-reports/${post.id}/`} class="text-custom-200">{post.attributes.title}</a>
 						</li>
-					))
+					)) : <p>No Posts Found...</p>
 				}
 			</ul>
 		</main>
