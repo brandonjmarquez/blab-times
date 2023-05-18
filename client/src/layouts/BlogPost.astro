@@ -15,7 +15,7 @@ let coverUrl = "";
 if(cover.data) {
 	coverUrl = cover.data.attributes.url;
 }
-console.log(cover)
+console.log(cover.data.attributes.formats.small.url)
 ---
 
 <!DOCTYPE html>
@@ -41,7 +41,7 @@ console.log(cover)
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<article>
-				{coverUrl.length > 0 && <img src={`${import.meta.env.ASTRO_BACKEND_URL}${coverUrl}`} alt="" class="w-full rounded-b-md" />}
+				{coverUrl.length > 0 && <img src={cover.data.attributes.formats.large.url} alt="" class="w-full rounded-b-md" />}
 				<h1 class="title text-4xl">{title}</h1>
 				<FormattedDate date={createdAt} />
 				{

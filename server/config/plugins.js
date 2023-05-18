@@ -25,5 +25,22 @@ module.exports = ({ env }) => ({
       },
     },
   },
+  upload: {
+    config: {
+        provider: 'strapi-provider-upload-supabase-storage',
+        providerOptions: {
+            apiKey: env('SUPABASE_API_KEY'),
+            apiUrl: env('SUPABASE_API_URL'),
+            bucket: env('SUPABASE_BUCKET'),
+        },
+        breakpoints: {
+          xlarge: 1920,
+          large: 1000,
+          medium: 750,
+          small: 500,
+          xsmall: 64,
+        },
+    },
+  },
   // ...
 });

@@ -1,18 +1,17 @@
-module.exports = [
+module.exports = ({ env }) => [
   'strapi::errors',
-  'strapi::security',
-  // {
-  //   name: 'strapi::security',
-  //   config: {
-  //     contentSecurityPolicy: {
-  //       useDefaults: true,
-  //       directives: {
-  //         'connect-src': ["'self'", 'http:', 'https:'],
-  //         upgradeInsecureRequests: null,
-  //       },
-  //     },
-  //   },
-  // },
+  // 'strapi::security',
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        directives: {
+          'default-src': ["'self'"],
+          'img-src': ["'self'", 'data:', 'blob:', env('SUPABASE_API_URL')],
+        },
+      },
+    },
+  },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
@@ -21,4 +20,5 @@ module.exports = [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
+  
 ];
