@@ -68,7 +68,7 @@ const RecentPosts = (props: Props) => {
   }, [posts]);
 
   return (
-    <div className="md:w-1/5">
+    <div className="md:absolute md:w-1/5 right-0 mx-6">
       <h4 className="font-bold text-center">Recent Posts</h4>
       <ul>
         {posts.length > 0 ? posts.map((post: any, index: number) => {

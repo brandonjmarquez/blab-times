@@ -28,7 +28,8 @@ const LoginForm = (props: Props) => {
       setLoading(false);
       sessionStorage.setItem('jwt', jwt);
       setResponseMessage(res.data.message ?? "");
-      location.replace(props.ASTRO_FRONTEND_URL + location.hash.substring(1));
+      if(jwt)
+        location.replace(props.ASTRO_FRONTEND_URL + location.hash.substring(1));
     }).catch((err) => {
       setResponseMessage(err.response.data.error.message);
       setLoading(false);
