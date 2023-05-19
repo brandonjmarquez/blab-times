@@ -98,35 +98,35 @@ const Comments = (props: Props) => {
       </form>
       {
         comments.map((commentInfo: any, index: number) => {
+          let decodedJwt: {id: number, iat: number, exp: number} | null = null;
           if(sessionStorage.getItem("jwt")) {
-            const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt") ?? "")
-            
-            return (
-              <div key={index} className="border-2 px-2">
-                <p className="flex font-bold justify-between">
-                  {commentInfo.attributes.username}
-                  <time 
-                    dateTime={new Date(commentInfo.attributes.publishedAt).toISOString()}
-                    className="px-3 self-end"
-                  >
-                    {
-                      new Date(commentInfo.attributes.publishedAt).toLocaleString('en-us', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })
-                    }
-                  </time>
-                </p>
-                <p className="flex justify-between">
-                  <span className="whitespace-break-spaces">{commentInfo.attributes.comment}</span>
-                  <DeleteComment ASTRO_BACKEND_URL={props.ASTRO_BACKEND_URL} commentInfo={commentInfo} decodedJwt={decodedJwt}/>
-                </p>
-              </div>
-            )
+            decodedJwt = jwtDecode(sessionStorage.getItem("jwt") ?? "")
           }
+          return (
+            <div key={index} className="border-2 px-2">
+              <p className="flex font-bold justify-between">
+                {commentInfo.attributes.username}
+                <time 
+                  dateTime={new Date(commentInfo.attributes.publishedAt).toISOString()}
+                  className="px-3 self-end"
+                >
+                  {
+                    new Date(commentInfo.attributes.publishedAt).toLocaleString('en-us', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  }
+                </time>
+              </p>
+              <p className="flex justify-between">
+                <span className="whitespace-break-spaces">{commentInfo.attributes.comment}</span>
+                {decodedJwt ? <DeleteComment ASTRO_BACKEND_URL={props.ASTRO_BACKEND_URL} commentInfo={commentInfo} decodedJwt={decodedJwt}/> : null}
+              </p>
+            </div>
+          )
         })
       }
       {pagination.total / 25 > page && <button className="text-custom-200 bg-custom-300 rounded-md p-2 my-2" onClick={() => setPage(page + 1)}>Load more</button>}
