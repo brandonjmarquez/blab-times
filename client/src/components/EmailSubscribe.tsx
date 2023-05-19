@@ -24,7 +24,10 @@ const EmailSubscribe = (props: Props) => {
           data: {
             ...formData
           }
-        }).then((res) => { setLoading(false); setResponseMessage(res.data) });
+        }).then((res) => { 
+          setLoading(false); 
+          setResponseMessage(res.data) 
+        });
       } catch(err: any) {
         setResponseMessage(err.response.data.error.message)
       }
