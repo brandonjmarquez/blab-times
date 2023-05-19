@@ -17,7 +17,7 @@ export const menuItems = [
     submenu: [
       {
         title: 'Book Reports',
-        url: '/book-reports'
+        url: '/book-report'
       },
       {
         title: 'Poetry',
