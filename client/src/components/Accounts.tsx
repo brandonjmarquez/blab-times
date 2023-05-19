@@ -21,6 +21,7 @@ const Accounts = (props: Props) => {
   const [loadingSub, setLoadingSub] = useState(false);
   const [loadingLikes, setLoadingLikes] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
+  const [loadingChangeName, setLoadingChangeName] = useState(false)
 
   const getMe = async () => {
     const me = await axios.get(`${props.ASTRO_BACKEND_URL}/api/users/me`, {
@@ -43,6 +44,7 @@ const Accounts = (props: Props) => {
     }).then(() => {
       setResponseMessage("Password reset email successfully sent.")
       setLoadingChangePw(false);
+      setTimeout(() => setResponseMessage(""), 3000)
   })
     .catch((err) => setResponseMessage("An error occured: " + err.response))
   }
@@ -72,7 +74,6 @@ const Accounts = (props: Props) => {
   }
 
   const subscribe = async (e: ChangeEvent) => {
-    const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
     setLoadingSub(true);
     console.log(e, (e.target as HTMLInputElement).checked)
     if(isSubscribed) {
@@ -80,7 +81,12 @@ const Accounts = (props: Props) => {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
-      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data); setLoadingSub(false);})
+      }).then((res) => {
+        setIsSubscribed(!(e.target as HTMLInputElement).checked); 
+        setResponseMessage(res.data); 
+        setLoadingSub(false);
+        setTimeout(() => setResponseMessage(""), 3000)
+      })
     } else {
       const subscribe = await axios.post(`${props.ASTRO_BACKEND_URL}/api/subscribeds/`, {
         data: {
@@ -90,7 +96,34 @@ const Accounts = (props: Props) => {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
         }
-      }).then((res) => {setIsSubscribed(!(e.target as HTMLInputElement).checked); setResponseMessage(res.data); setLoadingSub(false);})
+      }).then((res) => {
+        setIsSubscribed(!(e.target as HTMLInputElement).checked); 
+        setResponseMessage(res.data); 
+        setLoadingSub(false);
+        setTimeout(() => setResponseMessage(""), 3000)
+      })
+    }
+  }
+
+  const changeUsername = async () => {
+    const username = (document.getElementById("username") as HTMLInputElement);
+    const readOnly = username.readOnly;
+    const decodedJwt: any = jwtDecode(sessionStorage.getItem("jwt")!);
+    username.readOnly = !readOnly;
+    if(readOnly) {
+      username.classList.add("bg-white");
+    } else {
+      setLoadingChangeName(true);
+      const changeName = await axios.put(`${props.ASTRO_BACKEND_URL}/api/users/${decodedJwt.id}`, {
+        username: username.value
+      }, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+        }
+      });
+      username.classList.remove("bg-white");
+      setLoadingChangeName(false);
+      console.log((document.getElementById("username") as HTMLInputElement).value)
     }
   }
 
@@ -110,7 +143,16 @@ const Accounts = (props: Props) => {
     userData ? 
     <div className="flex flex-col md:flex-row">
       <div className="md:w-1/3 my-2">
-        <p>Username: {userData.username}</p>
+        <div>
+          <label htmlFor="username">Username: </label>
+          <input id="username" name="username" className="bg-custom-100 rounded-md" defaultValue={userData.username} readOnly={true}></input>
+          <button className="text-custom-200 bg-custom-300 hover:bg-green-300 px-1 rounded-md"
+            onClick={changeUsername}
+          >
+            Change Username
+          </button>
+          {loadingChangeName ? <Loader class="inline-block relative" /> : null}
+        </div>
         <p>Email: {userData.email}</p>
         <p>Email Confirmed: {userData.confirmed ? "Confirmed" : "Unconfirmed"}</p>
         <span className="block">Subscribed: <input type="checkbox" checked={isSubscribed} onChange={subscribe}></input>{loadingSub ? <Loader class="inline-block absolute m-0" /> : null}</span>

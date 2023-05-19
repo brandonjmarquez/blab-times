@@ -31,7 +31,7 @@ const Comments = (props: Props) => {
 
   const comment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try{
+    try {
       if(sessionStorage.getItem("jwt")) {
         const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
         const createComment = async () => {
@@ -83,6 +83,8 @@ const Comments = (props: Props) => {
         } else {
           setResponseMessage("Please wait at least one minute before commenting again.")
         }
+      } else {
+        setResponseMessage("Please login to leave a comment.")
       }
     } catch(err: any) {
       setResponseMessage(err.response.data.error.message)
@@ -97,7 +99,7 @@ const Comments = (props: Props) => {
 
         </textarea>
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
-        <button type="submit" className="text-custom-200 bg-custom-300 rounded-md p-2 mb-2">Submit</button>
+        <button type="submit" className="text-custom-200 bg-custom-300 hover:bg-green-300 rounded-md p-2 mb-2">Submit</button>
       </form>
       { loading ? <Loader class="relative m-auto" /> :
         comments.map((commentInfo: any, index: number) => {
