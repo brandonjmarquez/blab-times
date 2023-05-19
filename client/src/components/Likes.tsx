@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { set } from "astro/zod";
+import Loader from "./Loader";
 
 interface Props {
   api: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Likes = (props: Props) => {
-  const [likes, setLikes] = useState<number>(0);
+  const [likes, setLikes] = useState<number>(-1);
   const [liked, setLiked] = useState<any>({});
   const [responseMessage, setResponseMessage] = useState("");
 
@@ -20,14 +20,13 @@ const Likes = (props: Props) => {
         const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
         await getLiked(decodedJwt.id);
       }
-      const countLikes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/count-likes/${props.api}/${props.postId}`)
+      const countLikes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/count-likes/${props.api}/${props.postId}`);
       return countLikes;
     };
 
     const setLikeNum = async () => {
       try {
         const likes: any = await getLikes();
-        console.log(likes)
         setLikes(likes.data)
       } catch(err) {
         setResponseMessage("")
@@ -107,7 +106,7 @@ const Likes = (props: Props) => {
         className={`${Object.keys(liked).length > 0 ? (liked.attributes.liked ? 'text-red-400 hover:text-red-400' : 'text-custom-200') : 'text-custom-200'} hover:text-black hover:bg-green-300 text-6xl bg-custom-300 px-1 py-2 rounded-full`} 
         onClick={like}
       >{'<3'}</button>
-      <span> {likes}</span>
+      <span> {likes === -1 ? <Loader class="inline-block relative" />: likes}</span>
       <p className="text-red-500">{responseMessage}</p>
     </div>
   )

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import DeleteComment from './DeleteComment';
+import Loader from './Loader';
 
 interface Props {
   api: string;
@@ -14,6 +15,7 @@ const Comments = (props: Props) => {
   const [comments, setComments] = useState<{username: string, comment: string}[]>([]);
   const [pagination, setPagination] = useState<any>({});
   const [responseMessage, setResponseMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getComments = async () => {
@@ -21,6 +23,7 @@ const Comments = (props: Props) => {
     };
     
     getComments().then((res) => {
+      setLoading(false);
       setPagination(res.data.meta.pagination); 
       setComments((comments) => [...comments, ...res.data.data])
     });
@@ -96,7 +99,7 @@ const Comments = (props: Props) => {
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
         <button type="submit" className="text-custom-200 bg-custom-300 rounded-md p-2 mb-2">Submit</button>
       </form>
-      {
+      { loading ? <Loader class="relative m-auto" /> :
         comments.map((commentInfo: any, index: number) => {
           let decodedJwt: {id: number, iat: number, exp: number} | null = null;
           if(sessionStorage.getItem("jwt")) {
