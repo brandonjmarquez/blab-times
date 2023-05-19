@@ -19,7 +19,7 @@ export const menuItemsCollapsed = [{
       submenu: [
         {
           title: 'Book Reports',
-          url: '/book-report'
+          url: '/book-reports'
         },
         {
           title: 'Poetry',
