@@ -16,21 +16,24 @@ const Likes = (props: Props) => {
 
   useEffect(() => {
     const getLikes = async () => {
-      const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
-      await getLiked(decodedJwt.id);
-
+      if(sessionStorage.getItem("jwt")) {
+        const decodedJwt: {id: number, iat: number, exp: number} = jwtDecode(sessionStorage.getItem("jwt")!);
+        await getLiked(decodedJwt.id);
+      }
       const countLikes = await axios.get(`${props.ASTRO_BACKEND_URL}/api/likes/count-likes/${props.api}/${props.postId}`)
-      return countLikes
+      return countLikes;
     };
 
-    (async () => {
+    const setLikeNum = async () => {
       try {
         const likes: any = await getLikes();
+        console.log(likes)
         setLikes(likes.data)
       } catch(err) {
         setResponseMessage("")
       }
-    })();
+    }//)();
+    setLikeNum();
   }, []);
 
   const getLiked = async (id: number) => {
@@ -40,7 +43,8 @@ const Likes = (props: Props) => {
       if(liked.data.data.length === 1)
         setLiked(liked.data.data[0])
       else
-        setLiked
+        return;
+        // setLiked
         
     } catch(err) {
       setResponseMessage("There was an error fetching the amount of likes.");

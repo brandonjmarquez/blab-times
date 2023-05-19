@@ -40,7 +40,6 @@ if(cover.data) {
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<article class="md:mx-12">
-				{coverUrl.length > 0 && <img src={cover.data.attributes.formats.small.url} alt="" class="w-full rounded-b-md" />}
 				<h1 class="title text-4xl text-center">{title}</h1>
 				<div class="text-center">
 					<FormattedDate date={createdAt} />
@@ -48,15 +47,16 @@ if(cover.data) {
 						updatedAt && (
 							<div>
 								Last updated on <FormattedDate date={updatedAt} />
-							</div>
-						)
-					}
+								</div>
+								)
+							}
 				</div>
+				{coverUrl.length > 0 && <img src={cover.data.attributes.formats.small.url} alt="" class="w-full rounded-b-md" />}
 				<hr/>
 				<slot />
 				{post.split("\n").map((post: any) => {
 					return(
-						<p class="indent-10">
+						<p class={api !== 'poetry' ? 'indent-10' : ''}>
 							{post}
 							<br>
 						</p>
