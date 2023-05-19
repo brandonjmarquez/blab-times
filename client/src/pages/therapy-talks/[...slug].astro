@@ -4,7 +4,6 @@ import BlogPost from '../../layouts/BlogPost.astro';
 import axios from 'axios';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
 	const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/therapy-talks?populate=*`);
 	const { data } = await response.data;
 

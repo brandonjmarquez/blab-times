@@ -13,9 +13,8 @@ const { title, post, description, createdAt, updatedAt, cover, api } = attribute
 let coverUrl = "";
 
 if(cover.data) {
-	coverUrl = cover.data.attributes.url;
+	coverUrl = cover.data.attributes.formats.small.url;
 }
-console.log(cover.data.attributes.formats.small.url)
 ---
 
 <!DOCTYPE html>
@@ -40,8 +39,8 @@ console.log(cover.data.attributes.formats.small.url)
 	<body>
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
-			<article>
-				{coverUrl.length > 0 && <img src={cover.data.attributes.formats.large.url} alt="" class="w-full rounded-b-md" />}
+			<article class="mx-12">
+				{coverUrl.length > 0 && <img src={cover.data.attributes.formats.small.url} alt="" class="w-full rounded-b-md" />}
 				<h1 class="title text-4xl">{title}</h1>
 				<FormattedDate date={createdAt} />
 				{
@@ -55,7 +54,7 @@ console.log(cover.data.attributes.formats.small.url)
 				<slot />
 				{post.split("\n").map((post: any) => {
 					return(
-						<p class="indent-4">
+						<p class="indent-10">
 							{post}
 							<br>
 						</p>

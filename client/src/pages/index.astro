@@ -12,7 +12,6 @@ import EmailSubscribe from '../components/EmailSubscribe';
 const response = await axios.get(`${import.meta.env.ASTRO_BACKEND_URL}/api/home`);
 const { data } = await response.data;
 const { home } = data.attributes;
-console.log(response.data)
 ---
 
 <!DOCTYPE html>
@@ -24,10 +23,10 @@ console.log(response.data)
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
 			<div class="flex flex-col md:flex-row justify-center w-full">
-				<div class="w-3/5">
+				<div class="md:w-3/5">
 					{home.split("\n").map((home: any) => {
 						return (
-							<p class="text-center px-20 mx">
+							<p class="text-center md:px-10">
 								{home}
 								<br>
 							</p>
