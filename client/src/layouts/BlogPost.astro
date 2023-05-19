@@ -39,17 +39,19 @@ if(cover.data) {
 	<body>
 		<Header title={SITE_TITLE} ASTRO_BACKEND_URL={import.meta.env.ASTRO_BACKEND_URL} client:load />
 		<main>
-			<article class="mx-12">
+			<article class="md:mx-12">
 				{coverUrl.length > 0 && <img src={cover.data.attributes.formats.small.url} alt="" class="w-full rounded-b-md" />}
-				<h1 class="title text-4xl">{title}</h1>
-				<FormattedDate date={createdAt} />
-				{
-					updatedAt && (
-						<div>
-							Last updated on <FormattedDate date={updatedAt} />
-						</div>
-					)
-				}
+				<h1 class="title text-4xl text-center">{title}</h1>
+				<div class="text-center">
+					<FormattedDate date={createdAt} />
+					{
+						updatedAt && (
+							<div>
+								Last updated on <FormattedDate date={updatedAt} />
+							</div>
+						)
+					}
+				</div>
 				<hr/>
 				<slot />
 				{post.split("\n").map((post: any) => {
