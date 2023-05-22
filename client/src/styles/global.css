@@ -101,3 +101,9 @@ main {
 	animation: dropdown .3s;
 	transform-origin: top center;
 }
+
+@media (max-width: 768px) {
+	main {
+		margin: 1rem;
+	}
+}
