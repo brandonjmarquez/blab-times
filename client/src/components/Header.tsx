@@ -40,9 +40,10 @@ const Header = (props: Props) => {
   return (
     <header className="sticky top-0 w-full bg-custom-100 px-5 md:px-20 pt-3 z-10">
       <div className="flex justify-between mx-auto my-0">
-        <h3 className="text-5xl text-custom-300">
+        <h3 className="text-3xl sm:text-5xl text-custom-300">
           <a href="/">
-            {props.title}
+            <img src="/logo.PNG" alt="blab times logo" className="inline-block w-[100px]"></img>
+            <span className="whitespace-nowrap">{props.title}</span>
           </a>
         </h3>
         <div className="min-[1090px]:block hidden w-3/4">
