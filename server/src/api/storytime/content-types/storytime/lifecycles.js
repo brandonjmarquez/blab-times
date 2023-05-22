@@ -21,7 +21,6 @@ module.exports = {
             to: entries[i].email,
             from: process.env.SMTP_USERNAME, // e.g. single sender verification in SendGrid
             subject: 'Blab Times has a new post!',
-            // text: '${fieldName}', // Replace with a valid field ID
             html: `
             <h1>New Post Alert</h1>
             <p>Check it out at the link below:</p>
