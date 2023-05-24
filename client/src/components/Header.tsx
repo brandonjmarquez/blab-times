@@ -46,13 +46,13 @@ const Header = (props: Props) => {
             <span className="whitespace-nowrap">{props.title}</span>
           </a>
         </h3>
-        <div className="min-[1090px]:block hidden w-3/4">
+        <div className="min-[1136px]:block hidden w-2/3">
           <nav>
             <Navbar collapsed={false} username={userData ? userData.username : ""} />
           </nav>
         </div>
         <div className="flex flex-row">
-          <div className="max-[1089px]:block hidden">
+          <div className="max-[1135px]:block hidden">
             <nav>
               <Navbar collapsed={true} username={userData ? userData.username : ""} />
             </nav>
