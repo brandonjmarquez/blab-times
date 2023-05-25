@@ -13,6 +13,16 @@ module.exports = {
 
   async afterCreate(event) {    // Connected to "Save" button in admin panel
     try{
+      const addRecentPost = await strapi.entityService.create('api::recent-post.recent-post', {
+        data: {
+          postId: event.result.id,
+          api: event.result.api,
+          title: event.result.title,
+          dateCreated: event.result.publishedAt,
+          publishedAt: new Date(),
+        }
+      })
+
       const entries = await strapi.db.query('api::subscribed.subscribed').findMany();
 
       if(entries.length > 0)

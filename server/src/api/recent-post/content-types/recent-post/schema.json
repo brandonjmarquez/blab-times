@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recent_posts",
+  "info": {
+    "singularName": "recent-post",
+    "pluralName": "recent-posts",
+    "displayName": "Recent Posts",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "postId": {
+      "type": "integer"
+    },
+    "api": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "dateCreated": {
+      "type": "datetime"
+    }
+  }
+}

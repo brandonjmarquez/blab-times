@@ -16,27 +16,26 @@ const RecentPosts = (props: Props) => {
     const monthAgo = new Date(new Date().setDate(current.getDate() - 30));
 
     const fetchPosts = async () => {
-      const bookReports = await axios.get(`${props.ASTRO_BACKEND_URL}/api/book-reports?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const poetry = await axios.get(`${props.ASTRO_BACKEND_URL}/api/poetries?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const storytime = await axios.get(`${props.ASTRO_BACKEND_URL}/api/storytimes?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const therapyTalks = await axios.get(`${props.ASTRO_BACKEND_URL}/api/therapy-talks?filters[publishedAt][$gte]=${monthAgo.toJSON()}`);
-      const fetches = [bookReports, poetry, storytime, therapyTalks];
-      const posts = await Promise.all(fetches.map(r => r.data));
-      
-      return posts;
+      try {
+        const recentPosts = await axios.get(`${props.ASTRO_BACKEND_URL}/api/recent-posts`);
+        
+        return recentPosts.data.data;
+      } catch(err) {
+        console.error(err);
+      }
     }
 
     const getPosts = async () => {
-      await fetchPosts().then((datas) => {
-        setLoading(false);
-        setPosts(() => {
-          let data: any = []
-          datas.forEach((post: any) => {
-            data = [...data, ...post.data]
-          })
-          return data;
+      try {
+        const posts = await fetchPosts();
+        let data = posts.map((post: any) => {
+          return {...post.attributes};
         })
-      });
+        setPosts(data);
+        setLoading(false);
+      } catch(err) {
+        console.log(err);
+      }
     }
     getPosts()
   }, []);
@@ -54,7 +53,7 @@ const RecentPosts = (props: Props) => {
       let postsSorted = posts;
       for (var i = 0; i < posts.length - 1; i++) {
         for (var j = 0; j < posts.length-i-1; j++) {
-          if (new Date(postsSorted[j].attributes.publishedAt) < new Date (postsSorted[j + 1].attributes.publishedAt)) {
+          if (new Date(postsSorted[j].createdAt) < new Date (postsSorted[j + 1].createdAt)) {
             postsSorted = swap(postsSorted, j, j+1);
           }
         }
@@ -72,12 +71,12 @@ const RecentPosts = (props: Props) => {
       <h4 className="font-bold text-center">Recent Posts</h4>
       <ul>
         {posts.length > 0 ? posts.map((post: any, index: number) => {
-          const title = post.attributes.title.length < 32 ? post.attributes.title : post.attributes.title.substring(0, 32) + "..."
-          let date = new Date(post.attributes.publishedAt);
+          const title = post.title.length < 32 ? post.title : post.title.substring(0, 32) + "..."
+          let date = new Date(post.createdAt);
           return (
             <div key={index}>
               <li className="flex justify-center text-center">
-                <a href={`/${post.attributes.api}/${post.id}`} className="text-custom-200">
+                <a href={`/${post.api}/${post.postId}`} className="text-custom-200">
                   <p className="underline">{title}</p>
                   <p>{date.toLocaleDateString()}</p>
                 </a>
