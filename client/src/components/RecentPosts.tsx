@@ -72,7 +72,8 @@ const RecentPosts = (props: Props) => {
       <ul>
         {posts.length > 0 ? posts.map((post: any, index: number) => {
           const title = post.title.length < 32 ? post.title : post.title.substring(0, 32) + "..."
-          let date = new Date(post.createdAt);
+          let date = new Date(post.publishedAt);
+          
           return (
             <div key={index}>
               <li className="flex justify-center text-center">

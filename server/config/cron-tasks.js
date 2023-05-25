@@ -59,25 +59,19 @@ module.exports = {
         }
       })
       const posts = [...bookReports, ...poetries, ...storytimes, ...therapyTalks];
-      let postsRevised = [];
 
-      posts.forEach((post) => {
+      posts.forEach(async (post) => {
         let postCp = {...post};
 
-        postCp.dateCreated = postCp.publishedAt;
         postCp.postId = postCp.id;
         delete postCp.id;
         delete postCp.post;
-        delete postCp.createdAt;
         delete postCp.updatedAt;
-        delete postCp.publishedAt;
-        postsRevised.push(postCp);
-      });
-      postsRevised.forEach(async (post) => {
         const addRecentPost = await strapi.entityService.create('api::recent-post.recent-post', {
           data: {
-            ...post,
-            publishedAt: new Date(),
+            ...postCp,
+            createdAt: post.createdAt,
+            publishedAt: post.publishedAt,
           }
         })
       });

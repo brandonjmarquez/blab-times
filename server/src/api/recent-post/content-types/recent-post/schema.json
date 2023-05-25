@@ -20,9 +20,6 @@
     },
     "title": {
       "type": "string"
-    },
-    "dateCreated": {
-      "type": "datetime"
     }
   }
 }
