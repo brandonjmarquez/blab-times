@@ -13,7 +13,7 @@ export const menuItems = [
     target: '_blank',
   },
   {
-    title: 'Writing Categories ▼',
+    title: 'Blog Posts ▼',
     submenu: [
       {
         title: 'Book Reports',

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Dropdown from './Dropdown';
 
-const MenuItem = ({ buttonClassName, collapsed, liClassName, depthLevel, index, items, username }: any) => {
+const MenuItem = ({ collapsed, liClassName, depthLevel, index, items, username }: any) => {
   const [dropdown, setDropdown] = useState(false);
   const ref = useRef<HTMLLIElement>(null);
 
@@ -33,27 +33,6 @@ const MenuItem = ({ buttonClassName, collapsed, liClassName, depthLevel, index, 
     }
   }, [dropdown]);
 
-  // useEffect(() => {
-  //   const overHandler = () => {
-  //     setDropdown(true)
-  //   }
-  //   const outHandler = () => {
-  //     setDropdown(false);
-  //   }
-
-  //   if(ref.current) {
-  //     ref.current!.addEventListener("mouseover", overHandler);
-  //     ref.current!.addEventListener("mouseout", outHandler);
-  //   }
-
-  //   return () => {
-  //     if(ref.current) {
-  //       ref.current.removeEventListener("mouseover", overHandler);
-  //       ref.current.removeEventListener("mouseout", outHandler);
-  //     }
-  //   }
-  // }, []);
-
   return (
     <li ref={ref} className={`relative ${liClassName}`}>
       {items.submenu ? (
@@ -70,7 +49,7 @@ const MenuItem = ({ buttonClassName, collapsed, liClassName, depthLevel, index, 
           <Dropdown collapsed={collapsed} depthLevel={depthLevel} dropdown={dropdown} submenus={items.submenu} username={username} />
         </>
       ) : (
-        <button onClick={() => items.target ? window.open(items.url) : location.href=items.url} className={`text-custom-200 bg-custom-300 hover:bg-green-300 w-full p-3 text-center ${firstMenuItemLevel1 + lastMenuItemLevel1 + firstMenuItemLevel2 + lastMenuItemLevel2 + depthIs0 + uncollLastMenuItemLevel1 + " " + collapsed}`}>{items.title.includes('{username}') ? items.title.replace('{username}', username) : items.title}</button>
+        <button onClick={() => items.target ? window.open(items.url) : location.href=items.url} className={`text-custom-200 bg-custom-300 hover:bg-green-300 w-full p-3 text-center ${firstMenuItemLevel1 + lastMenuItemLevel1 + firstMenuItemLevel2 + lastMenuItemLevel2 + depthIs0 + uncollLastMenuItemLevel1}`}>{items.title.includes('{username}') ? items.title.replace('{username}', username) : items.title}</button>
       )}
     </li>
   )

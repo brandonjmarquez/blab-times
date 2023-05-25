@@ -43,7 +43,7 @@ const Header = (props: Props) => {
         <h3 className="text-3xl sm:text-5xl text-custom-300">
           <a href="/">
             <img src="/logo.PNG" alt="blab times logo" className="inline-block w-[100px]"></img>
-            <span className="whitespace-nowrap">{props.title}</span>
+            <span className="max-[352px]:hidden whitespace-nowrap">{props.title}</span>
           </a>
         </h3>
         <div className="min-[1136px]:block hidden w-2/3">
