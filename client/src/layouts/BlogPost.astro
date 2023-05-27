@@ -9,7 +9,7 @@ import Comments from '../components/Comments';
 import Likes from '../components/Likes';
 
 const { attributes, id } = Astro.props;
-const { title, post, description, createdAt, updatedAt, cover, api } = attributes;
+const { title, post, description, createdAt, updatedAt, cover, api, audioId } = attributes;
 let coverUrl = "";
 
 if(cover.data) {
@@ -62,6 +62,10 @@ if(cover.data) {
 						</p>
 					)
 				})}
+				{audioId && 
+					<audio class='m-auto' controls="controls" controlslist='nodownload'>
+						<source src={`https://docs.google.com/uc?export=download&id=${audioId}`}>
+					</audio>}
 			</article>
 			<hr/>
 			<div>
