@@ -8,15 +8,9 @@ interface Props {
 }
 
 const Header = (props: Props) => {
-  const [pathname, setPathname] = useState<string>()
   const [userData, setUserData] = useState<any>();
 
   useEffect(() => {
-    if(location.hash.length > 0) {
-      setPathname(location.hash.substring(1))
-    } else {
-      setPathname(location.pathname);
-    }
     const login = async () => {
       try {
         const res = await axios.get(`${props.ASTRO_BACKEND_URL}/api/users/me`, {
@@ -26,7 +20,9 @@ const Header = (props: Props) => {
             "Authorization": `Bearer ${sessionStorage.getItem("jwt")}`
         }}).then((res) => {
           setUserData(res.data);
-        }).catch(() => {
+        }).catch((err) => {
+          if(!userData)
+            sessionStorage.removeItem("jwt")
           return;
         })
       } catch(err) {

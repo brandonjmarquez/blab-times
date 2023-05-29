@@ -38,7 +38,7 @@ const MenuItem = ({ collapsed, liClassName, depthLevel, index, items, username }
       {items.submenu ? (
         <>
           <button 
-            className={`inline-flex items-center text-custom-200 bg-custom-300 hover:bg-green-300 w-full p-3 ${dropped + droppedColl + undroppedLevel0 + undroppedLevel1 + burger}`}
+            className={`inline-flex justify-center items-center text-custom-200 text-center bg-custom-300 hover:bg-green-300 w-full p-3 ${dropped + droppedColl + undroppedLevel0 + undroppedLevel1 + burger}`}
             type="button"
             aria-haspopup="menu"
             aria-expanded={dropdown ? "true" : "false"}

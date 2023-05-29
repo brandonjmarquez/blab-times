@@ -11,7 +11,6 @@ const LoginForm = (props: Props) => {
   const [responseMessage, setResponseMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -25,6 +24,7 @@ const LoginForm = (props: Props) => {
       ...formData
     }).then((res) => {
       const { jwt } = res.data;
+      
       setLoading(false);
       sessionStorage.setItem('jwt', jwt);
       setResponseMessage(res.data.message ?? "");
