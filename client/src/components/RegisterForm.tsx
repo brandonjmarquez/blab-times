@@ -24,7 +24,7 @@ const RegisterForm = (props: Props) => {
         ...formData
       }).then((res) => {
         setLoading(false);
-        location.replace(props.ASTRO_FRONTEND_URL + '/login' + location.hash);
+        location.replace(props.ASTRO_FRONTEND_URL + '/login');
       }).catch((err) => {
         console.log(err)
         setResponseMessage(err.response.data.error.message)

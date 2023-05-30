@@ -8,6 +8,7 @@ interface Props {
 }
 
 const LoginForm = (props: Props) => {
+  const [email, setEmail] = useState('');
   const [responseMessage, setResponseMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -24,12 +25,12 @@ const LoginForm = (props: Props) => {
       ...formData
     }).then((res) => {
       const { jwt } = res.data;
-      
+
       setLoading(false);
       sessionStorage.setItem('jwt', jwt);
       setResponseMessage(res.data.message ?? "");
       if(jwt)
-        location.replace(props.ASTRO_FRONTEND_URL + location.hash.substring(1));
+        location.replace(props.ASTRO_FRONTEND_URL);
     }).catch((err) => {
       setResponseMessage(err.response.data.error.message);
       setLoading(false);
@@ -47,6 +48,7 @@ const LoginForm = (props: Props) => {
             name="identifier"
             className="text-sm outline-none pb-5 w-full border-b rounded-md hover:border-blue-700 focus:border-blue-700"
             autoComplete="off"
+            onChange={(e) => setEmail(e.target.value)}
           ></input>
         </div>
         <div className="my-2">
@@ -62,8 +64,19 @@ const LoginForm = (props: Props) => {
         {responseMessage && <p className="text-red-500">{responseMessage}</p>}
         <button type="submit" className={`self-center text-custom-200 bg-custom-300 w-1/2 rounded-md py-2`}>{loading ? <Loader class="relative m-auto " /> : "Login"}</button>
       </form>
-      <p>Not a member? <a href={`/register${location.hash}`}>Click here to register.</a></p>
+      <p>Not a member? <a href='/register'>Click here to register.</a></p>
       <p>Forgot your password? <a href='/send-email'>Click here to reset it.</a></p>
+      <p className='inline'>Resend Confirmation Email? <span className='text-custom-200 cursor-pointer' onClick={async () => {
+        try {
+          const resendRes = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/send-email-confirmation`, {
+            email: email, // user's email
+          });
+          setResponseMessage("Confirmation email sent.");
+        } catch(err: any) {
+          console.error(err);
+          setResponseMessage(err.message);
+        }
+      }}>Type your email into the box and click here to resend it.</span></p>
     </div>
   )
 }
