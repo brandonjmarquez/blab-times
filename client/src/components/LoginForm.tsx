@@ -20,8 +20,8 @@ const LoginForm = (props: Props) => {
         a[key] = value;
         return a;
       }, {});
-
-    const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/users-permissions/auth/local`, {
+      
+    const res = await axios.post(`${props.ASTRO_BACKEND_URL}/api/auth/local`, {
       ...formData
     }).then((res) => {
       const { jwt } = res.data;
