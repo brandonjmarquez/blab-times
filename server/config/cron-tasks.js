@@ -1,12 +1,6 @@
 module.exports = {
-  /**
-   * Simple example.
-   * Every monday at 1am.
-   */
-
   deleteRecentPosts: {
     task: async ({ strapi }) => {
-      // Add your own logic here (e.g. send a queue of email, create a database backup, etc.).
       const entries = await strapi.db.query('api::recent-post.recent-post').findMany();
       for(var i = 0; i < entries.length; i++) {
         const deleteEntries = await strapi.db.query('api::recent-post.recent-post').delete({
@@ -17,7 +11,6 @@ module.exports = {
           }
         })
       }
-      console.log(entries)
     },
     options: {
       rule: "0 0 2 * * *",
@@ -27,7 +20,6 @@ module.exports = {
 
   findRecentPosts: {
     task: async ({ strapi }) => {
-      // Add your own logic here (e.g. send a queue of email, create a database backup, etc.).
       const current = new Date();
       const monthAgo = new Date(new Date().setDate(current.getDate() - 30));
       const bookReports = await strapi.db.query('api::book-report.book-report').findMany({
@@ -81,4 +73,23 @@ module.exports = {
       tz: "America/Chicago",
     },
   },
+
+  keepDatabaseOpen: {
+    task: async ({ strapi }) => {
+      const editEntry = await strapi.db.query('api::trash-data.trash-data').update({
+        where: {
+          id: {
+            $eq: 1,
+          }
+        },
+        data: {
+          data: new Date(),
+        }
+      });
+    },
+    options: {
+      rule: "* * * * * 0",
+      tz: "America/Chicago",
+    },
+  }
 };

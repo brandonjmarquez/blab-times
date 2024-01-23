@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "trash_datas",
+  "info": {
+    "singularName": "trash-data",
+    "pluralName": "trash-datas",
+    "displayName": "trash data"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "data": {
+      "type": "string"
+    }
+  }
+}
